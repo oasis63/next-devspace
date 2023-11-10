@@ -1,16 +1,25 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
+import logger from "@/lib/logger";
 import type { NextApiRequest, NextApiResponse } from "next";
 
 type Data = {
   name?: string;
   message?: string;
   data?: any;
+  success?: boolean;
+  error?: string;
 };
 
 export default function handler(
   req: NextApiRequest,
   res: NextApiResponse<Data>
 ) {
+  logger(req, res, async (err: any) => {
+    if (err) {
+      console.error("Logging middleware error:", err);
+      return res.status(500).json({ success: false, error: "Server Error" });
+    }
+  });
   if (req.method === "GET") {
     // Handle GET request
     res.status(200).json({ name: "John Doe", message: "data from webhooks" });
