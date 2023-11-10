@@ -1,3 +1,5 @@
+// http://localhost:3000/api/users
+
 import type { NextApiRequest, NextApiResponse } from "next";
 import connectDB from "../../../lib/db";
 import logger from "@/lib/logger";

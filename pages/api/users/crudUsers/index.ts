@@ -1,4 +1,5 @@
 // pages/api/users/crudUsers.ts
+// http://localhost:3000/api/users/crudUsers
 
 import type { NextApiRequest, NextApiResponse } from "next";
 import connectDB from "../../../../lib/db";

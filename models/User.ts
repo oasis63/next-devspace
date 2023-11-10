@@ -22,6 +22,7 @@ export interface UserDocument extends Document {
     gender: "Male" | "Female" | "Other";
     distance: number;
   };
+  photos: string[];    // string arrays of base64 values
   password: string;
 }
 
@@ -45,8 +46,14 @@ const userSchema = new Schema<UserDocument>({
     gender: { type: String, enum: ["Male", "Female", "Other"], required: true },
     distance: { type: Number, required: true },
   },
+  photos: { type: [String], required: true, validate: [arrayMinLength, 'At least one photo is required'] },
   password: { type: String, required: true },
 });
+
+// Custom validator to ensure at least one photo is present
+function arrayMinLength(value: any[]) {
+  return value.length > 0;
+}
 
 const User = mongoose.model<UserDocument>("User", userSchema);
 
