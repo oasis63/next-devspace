@@ -3,7 +3,7 @@
 import mongoose, { Document, Schema } from "mongoose";
 
 export interface UserDocument extends Document {
-  userId: string; // Change uniqueCode to userId
+  userId: string;
   name: string;
   username: string;
   email: string;
@@ -22,16 +22,16 @@ export interface UserDocument extends Document {
     gender: "Male" | "Female" | "Other";
     distance: number;
   };
-  photos: string[];    // string arrays of base64 values
+  photos: string[]; // string arrays of base64 values
   password: string;
 }
 
 const userSchema = new Schema<UserDocument>({
-  userId: { type: String, unique: true }, // Change uniqueCode to userId
+  userId: { type: String, unique: true, required: true },
   name: { type: String, required: true },
   username: { type: String, required: true, unique: true },
   email: { type: String, required: true, unique: true },
-  phone: { type: String, required: true },
+  phone: { type: String, required: true, unique: true },
   location: {
     city: { type: String, required: true },
     state: { type: String, required: true },
@@ -46,7 +46,11 @@ const userSchema = new Schema<UserDocument>({
     gender: { type: String, enum: ["Male", "Female", "Other"], required: true },
     distance: { type: Number, required: true },
   },
-  photos: { type: [String], required: true, validate: [arrayMinLength, 'At least one photo is required'] },
+  photos: {
+    type: [String],
+    required: true,
+    validate: [arrayMinLength, "At least one photo is required"],
+  },
   password: { type: String, required: true },
 });
 

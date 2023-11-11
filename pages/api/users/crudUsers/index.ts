@@ -5,6 +5,8 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import connectDB from "../../../../lib/db";
 import User, { UserDocument } from "../../../../models/User";
 import logger from "@/lib/logger";
+import { generateSecureUserId } from "@/utils/helpers";
+
 
 connectDB();
 
@@ -58,9 +60,26 @@ async function createUser(req: NextApiRequest, res: NextApiResponse) {
   }
 
   try {
-    const { userId, ...userData } = req.body;
-    const user = new User({ userId, ...userData });
+    // const counterDoc = await Counter.findOneAndUpdate(
+    //   { _id: "userId" },
+    //   { $inc: { seq: 1 } },
+    //   { new: true, upsert: true }
+    // );
+    // const { seq } = counterDoc || { seq: 1 };
+    // const user = new User({ userId: seq, ...req.body });
+
+    // const { userId, ...userData } = req.body;
+    // const user = new User({ userId, ...userData });
+    // await user.save();
+
+    const userId = generateSecureUserId();
+
+    console.log('userId : ', userId)
+    console.log(typeof userId )
+    
+    const user = new User({ userId, ...req.body });
     await user.save();
+
     return res.status(201).json({ success: true, data: user });
   } catch (error) {
     console.error("Error creating user:", error);
