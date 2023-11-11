@@ -1,8 +1,10 @@
 // pages/index.tsx
 
+import FeaturedUser from "@/components/FeaturedUser/FeaturedUser";
 import FooterMui from "@/components/FooterMui/FooterMui";
 import Header from "@/components/Header/Header";
 import UserList from "@/components/UserList/UserList";
+import { mockUsers } from "@/testDatas/mockUsers";
 import { User } from "@/utils/models";
 import Link from "next/link";
 import { useEffect, useState } from "react";
@@ -10,6 +12,8 @@ import { useEffect, useState } from "react";
 const Home = () => {
   const [users, setUsers] = useState<User[]>([]);
   // const [users, setUsers] = useState([]);
+
+  const featuredUser = mockUsers[0];
 
   const fetchUsers = async () => {
     try {
@@ -34,14 +38,14 @@ const Home = () => {
   }, []);
 
   return (
-    <div>
+    <>
       <Header />
-      <h1>Welcome to My Dating App!</h1>
-      <UserList users={users} />
-      {/* <Link href="/profile">Go to Profile Page</Link> */}
-      {/* Add other components and content here */}
-      <FooterMui /> {/* Include FooterMui component */}
-    </div>
+      <main>
+        <FeaturedUser user={featuredUser} /> {/* Add FeaturedUser component */}
+        <UserList users={mockUsers} />
+      </main>
+      <FooterMui />
+    </>
   );
 };
 

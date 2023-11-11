@@ -1,8 +1,8 @@
 // components/UserProfile.tsx
 
-import { Typography } from "@mui/material";
 import styles from "./UserProfile.module.scss";
 import { User } from "@/utils/models";
+import { Container, Typography, Avatar, Grid } from "@mui/material";
 
 interface UserProfileProps {
   user: User;
@@ -10,13 +10,35 @@ interface UserProfileProps {
 
 const UserProfile = ({ user }: UserProfileProps) => {
   return (
-    <div className={styles.container}>
-      <Typography variant="h2">{user.name}'s Profile</Typography>
-      <Typography variant="body1">Email: {user.email}</Typography>
-      {/* <h2>{user.name}'s Profile</h2> */}
-      {/* <p>Email: {user.email}</p> */}
-      {/* Add more user details here */}
-    </div>
+    <Container className={styles.container}>
+      <Grid container spacing={2}>
+        <Grid item>
+          <Avatar
+            className={styles.avatar}
+            src={`https://via.placeholder.com/150`}
+            alt={user.name}
+          />
+        </Grid>
+        <Grid item xs={12} sm container>
+          <Grid item xs container direction="column" spacing={2}>
+            <Grid item>
+              <Typography variant="h4">{user.name}</Typography>
+            </Grid>
+            <Grid item>
+              <Typography variant="body1">Age: {user.age}</Typography>
+              <Typography variant="body1">
+                Location: {user.location?.city}
+              </Typography>
+            </Grid>
+            <Grid item>
+              <Typography variant="body2">
+                Interests: {user?.interests?.join(", ")}
+              </Typography>
+            </Grid>
+          </Grid>
+        </Grid>
+      </Grid>
+    </Container>
   );
 };
 

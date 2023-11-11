@@ -1,24 +1,45 @@
 // components/UserList.tsx
 
+import React, { useEffect, useState } from "react";
+import {
+  Container,
+  Typography,
+  Grid,
+  Avatar,
+  Card,
+  CardContent,
+  styled,
+  Box,
+} from "@mui/material";
 import { User } from "@/utils/models";
-import React from "react";
-import Link from "next/link";
-import styles from "./UserList.module.scss";
+import FeaturedUser from "../FeaturedUser/FeaturedUser";
+import UserCard from "../UserCard/UserCard";
 
 interface UserListProps {
   users: User[];
 }
 
 const UserList: React.FC<UserListProps> = ({ users }) => {
+  const handleConnect = (userId: any) => {
+    // Implement your logic to handle connecting with a user
+    console.log(`Connect with user ${userId}`);
+  };
   return (
-    <ul className={styles.userList}>
-      {users.map((user) => (
-        <li key={user.userId} className={styles.userListItem}>
-          <Link href={`/profile/${user.userId}`}>{user.name}</Link>
-        </li>
-        // Display other user details as needed
-      ))}
-    </ul>
+    <Container>
+      {/* <Typography variant="h4" gutterBottom>
+        User List
+      </Typography> */}
+      <Grid container spacing={2}>
+        {users.map((user) => (
+          <Grid item key={user.userId} xs={12} sm={6} md={4}>
+            <UserCard
+              user={user}
+              onConnect={() => handleConnect(user?.userId)}
+            />
+          </Grid>
+        ))}
+      </Grid>
+    </Container>
   );
 };
 

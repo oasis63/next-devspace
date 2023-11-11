@@ -4,8 +4,9 @@ import mongoose, { Document, Schema } from "mongoose";
 
 export interface UserDocument extends Document {
   userId: string;
-  name: string;
   username: string;
+  name: string;
+  age: number;
   email: string;
   phone: string;
   location: {
@@ -28,8 +29,9 @@ export interface UserDocument extends Document {
 
 const userSchema = new Schema<UserDocument>({
   userId: { type: String, unique: true, required: true },
-  name: { type: String, required: true },
   username: { type: String, required: true, unique: true },
+  name: { type: String, required: true },
+  age: { type: Number, required: true },
   email: { type: String, required: true, unique: true },
   phone: { type: String, required: true, unique: true },
   location: {
