@@ -20,9 +20,13 @@ interface UserListProps {
 }
 
 const UserList: React.FC<UserListProps> = ({ users }) => {
-  const handleConnect = (userId: any) => {
+  const handleLike = (userId: any) => {
     // Implement your logic to handle connecting with a user
-    console.log(`Connect with user ${userId}`);
+    console.log(`Liked the user ${userId}`);
+  };
+  const handleDislike = (userId: any) => {
+    // Implement your logic to handle connecting with a user
+    console.log(`Dislike the user ${userId}`);
   };
   return (
     <Container>
@@ -34,7 +38,8 @@ const UserList: React.FC<UserListProps> = ({ users }) => {
           <Grid item key={user.userId} xs={12} sm={6} md={4}>
             <UserCard
               user={user}
-              onConnect={() => handleConnect(user?.userId)}
+              onLike={() => handleLike(user?.userId)}
+              onDislike={() => handleDislike(user?.userId)}
             />
           </Grid>
         ))}

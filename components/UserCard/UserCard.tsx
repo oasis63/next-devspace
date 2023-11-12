@@ -8,12 +8,18 @@ import {
   Avatar,
   Button,
   styled,
+  IconButton,
 } from "@mui/material";
 import { User } from "@/utils/models";
+import FavoriteIcon from "@mui/icons-material/Favorite";
+import ThumbDownIcon from "@mui/icons-material/ThumbDown";
+import CheckIcon from "@mui/icons-material/Check";
+import CloseIcon from "@mui/icons-material/Close";
 
 interface UserCardProps {
   user: User;
-  onConnect: () => void; // Callback function for the connect button
+  onLike: () => void;
+  onDislike: () => void;
 }
 
 const StyledUserCard = styled(Card)({
@@ -37,11 +43,39 @@ const UserInterests = styled(Typography)({
   fontStyle: "italic",
 });
 
+const ActionButtonsContainer = styled("div")({
+  display: "flex",
+  justifyContent: "space-between",
+  marginTop: "16px",
+});
+
+// round back buttons ,
+const RoundButton = styled(Button)({
+  backgroundColor: "#fff",
+  borderRadius: "50%",
+  padding: "8px",
+  minWidth: "0",
+});
+
+const LikeButton = styled(RoundButton)({
+  // backgroundColor: "#e0f2f1",
+  "&:hover": {
+    backgroundColor: "#e0f2f1",
+  },
+});
+
+const DislikeButton = styled(RoundButton)({
+  // backgroundColor: "#ffebee",
+  "&:hover": {
+    backgroundColor: "#ffebee",
+  },
+});
+
 const ConnectButton = styled(Button)({
   marginTop: "16px",
 });
 
-const UserCard: React.FC<UserCardProps> = ({ user, onConnect }) => {
+const UserCard: React.FC<UserCardProps> = ({ user, onLike, onDislike }) => {
   return (
     <StyledUserCard>
       <UserAvatar src={user?.photos?.[0]} alt={user.name} />
@@ -49,9 +83,23 @@ const UserCard: React.FC<UserCardProps> = ({ user, onConnect }) => {
       <Typography variant="body2">Age: {user.age}</Typography>
       <Typography variant="body2">Location: {user?.location?.city}</Typography>
       <UserInterests>Interests: {user?.interests?.join(", ")}</UserInterests>
-      <ConnectButton variant="contained" color="primary" onClick={onConnect}>
-        Connect
-      </ConnectButton>
+      <ActionButtonsContainer>
+        <IconButton color="secondary" onClick={onDislike}>
+          <ThumbDownIcon />
+        </IconButton>
+        <IconButton color="primary" onClick={onLike}>
+          <FavoriteIcon />
+        </IconButton>
+      </ActionButtonsContainer>
+
+      {/* <ActionButtonsContainer>
+        <DislikeButton onClick={onDislike}>
+          <CloseIcon />
+        </DislikeButton>
+        <LikeButton onClick={onLike}>
+          <CheckIcon />
+        </LikeButton>
+      </ActionButtonsContainer> */}
     </StyledUserCard>
   );
 };

@@ -41,7 +41,7 @@ const Home = () => {
     <>
       <Header />
       <main>
-        <FeaturedUser user={featuredUser} /> {/* Add FeaturedUser component */}
+        {/* <FeaturedUser user={featuredUser} /> */}
         <UserList users={mockUsers} />
       </main>
       <FooterMui />
