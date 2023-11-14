@@ -76,9 +76,9 @@ const Header: React.FC<HeaderProps> = ({
         {/* Profile Link with Profile Photo */}
         <Link href="/profile">
           <IconButton color="inherit">
-            {loggedInUser.profilePhotoUrl ? (
+            {loggedInUser?.profilePhotoUrl ? (
               <img
-                src={loggedInUser.profilePhotoUrl}
+                src={loggedInUser?.profilePhotoUrl}
                 alt="Profile"
                 className={styles.profilePhoto}
               />

@@ -12,6 +12,31 @@ import { useEffect, useState } from "react";
 const cities = ["New York", "Los Angeles", "London", "Paris", "Tokyo"];
 
 const Home = () => {
+  const loggedInUser: User = {
+    userId: "1",
+    username: "john_doe",
+    name: "John Doe",
+    age: 28,
+    email: "john.doe@example.com",
+    phone: "123-456-7890",
+    location: {
+      city: "New York",
+      state: "NY",
+      country: "USA",
+    },
+    interests: ["Reading", "Hiking", "Photography"],
+    matchingPreference: {
+      age: {
+        min: 25,
+        max: 35,
+      },
+      gender: "Female",
+      distance: 50,
+    },
+    photos: ["https://reqres.in/img/faces/1-image.jpg"],
+    profilePhotoUrl: "https://reqres.in/img/faces/1-image.jpg",
+  };
+
   const [users, setUsers] = useState<User[]>([]);
 
   const [cityUsers, setCityUsers] = useState<User[]>([]);
@@ -77,6 +102,7 @@ const Home = () => {
     <>
       <Header
         cities={cities}
+        loggedInUser={loggedInUser} // udpate these values later
         likedProfilesCount={3}
         dislikedProfilesCount={5}
         onCityFilterChange={handleCityFilterChange}
