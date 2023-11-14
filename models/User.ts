@@ -1,31 +1,7 @@
 // models/User.ts
 
-import mongoose, { Document, Schema } from "mongoose";
-
-export interface UserDocument extends Document {
-  userId: string;
-  username: string;
-  name: string;
-  age: number;
-  email: string;
-  phone: string;
-  location: {
-    city: string;
-    state: string;
-    country: string;
-  };
-  interests: string[];
-  matchingPreference: {
-    age: {
-      min: number;
-      max: number;
-    };
-    gender: "Male" | "Female" | "Other";
-    distance: number;
-  };
-  photos: string[]; // string arrays of base64 values
-  password: string;
-}
+import mongoose, { Schema } from "mongoose";
+import { UserDocument } from "./UserDocument";
 
 const userSchema = new Schema<UserDocument>({
   userId: { type: String, unique: true, required: true },
@@ -53,7 +29,11 @@ const userSchema = new Schema<UserDocument>({
     required: true,
     validate: [arrayMinLength, "At least one photo is required"],
   },
+  profilePhotoUrl: { type: String, required: true },
   password: { type: String, required: true },
+
+  likedProfiles: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
+  dislikedProfiles: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
 });
 
 // Custom validator to ensure at least one photo is present

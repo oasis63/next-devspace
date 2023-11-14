@@ -20,5 +20,8 @@ export interface User {
     distance?: number;
   };
   photos?: string[]; // string arrays of base64 values
+  profilePhotoUrl?: string;
   password?: string;
+  likedProfiles?: any[];
+  dislikedProfiles?: any[];
 }

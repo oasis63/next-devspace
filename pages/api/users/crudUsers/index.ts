@@ -3,10 +3,10 @@
 
 import type { NextApiRequest, NextApiResponse } from "next";
 import connectDB from "../../../../lib/db";
-import User, { UserDocument } from "../../../../models/User";
+import User from "../../../../models/User";
+import { UserDocument } from "@/models/UserDocument";
 import logger from "@/lib/logger";
 import { generateSecureUserId } from "@/utils/helpers";
-
 
 connectDB();
 
@@ -36,6 +36,9 @@ export default async function handler(
       return editUser(req, res);
     case "DELETE":
       return deleteUser(req, res);
+    case "PATCH":
+      // Add or remove userId from likedProfiles or dislikedProfiles
+      return updateProfilePreference(req, res);
     default:
       return res
         .status(405)
@@ -44,7 +47,6 @@ export default async function handler(
 }
 
 async function getUsers(req: NextApiRequest, res: NextApiResponse) {
-  console.log("getuses hit");
   try {
     const users = await User.find({}, "-password");
     return res.status(200).json({ success: true, data: users });
@@ -74,9 +76,6 @@ async function createUser(req: NextApiRequest, res: NextApiResponse) {
 
     const userId = generateSecureUserId();
 
-    console.log('userId : ', userId)
-    console.log(typeof userId )
-    
     const user = new User({ userId, ...req.body });
     await user.save();
 
@@ -173,6 +172,57 @@ async function getUsersByLocation(req: NextApiRequest, res: NextApiResponse) {
   }
 }
 
+// New function to handle likedProfiles and dislikedProfiles
+async function updateProfilePreference(
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
+  const { userId } = req.query;
+
+  if (!userId || !req.body.action || !req.body.targetUserId) {
+    return res.status(400).json({ success: false, error: "Bad Request" });
+  }
+
+  try {
+    const user = await User.findOne({ userId });
+
+    if (!user) {
+      return res.status(404).json({ success: false, error: "User not found" });
+    }
+
+    const { action, targetUserId } = req.body;
+
+    if (action === "like") {
+      if (!user.likedProfiles.includes(targetUserId)) {
+        user.likedProfiles.push(targetUserId);
+        await user.save();
+      }
+    } else if (action === "dislike") {
+      if (!user.dislikedProfiles.includes(targetUserId)) {
+        user.dislikedProfiles.push(targetUserId);
+        await user.save();
+      }
+    } else if (action === "unlike") {
+      user.likedProfiles = user.likedProfiles.filter(
+        (id) => id !== targetUserId
+      );
+      await user.save();
+    } else if (action === "undislike") {
+      user.dislikedProfiles = user.dislikedProfiles.filter(
+        (id) => id !== targetUserId
+      );
+      await user.save();
+    } else {
+      return res.status(400).json({ success: false, error: "Invalid action" });
+    }
+
+    return res.status(200).json({ success: true, data: user });
+  } catch (error) {
+    console.error("Error updating profile preference:", error);
+    return res.status(500).json({ success: false, error: "Server Error" });
+  }
+}
+
 // endpoints- references
 /*
 GET All Users: GET /api/users/crudUsers
@@ -182,6 +232,11 @@ POST Create User: POST /api/users/crudUsers
 PUT Update User by userId: PUT /api/users/crudUsers?userId=yourUserId
 DELETE Delete User by userId: DELETE /api/users/crudUsers?userId=yourUserId
 
+
+Like a user: PATCH /api/users/crudUsers?userId=yourUserId with a JSON body { "action": "like", "targetUserId": "likedUserId" }
+Unlike a user: PATCH /api/users/crudUsers?userId=yourUserId with a JSON body { "action": "unlike", "targetUserId": "likedUserId" }
+Dislike a user: PATCH /api/users/crudUsers?userId=yourUserId with a JSON body { "action": "dislike", "targetUserId": "dislikedUserId" }
+Undislike a user: PATCH /api/users/crudUsers?userId=yourUserId with a JSON body { "action": "undislike", "targetUserId": "dislikedUserId" }
 
 
 */

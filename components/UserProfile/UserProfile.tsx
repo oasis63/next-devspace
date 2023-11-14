@@ -15,7 +15,7 @@ const UserProfile = ({ user }: UserProfileProps) => {
         <Grid item>
           <Avatar
             className={styles.avatar}
-            src={`https://via.placeholder.com/150`}
+            src={user?.photos?.[0]}
             alt={user.name}
           />
         </Grid>

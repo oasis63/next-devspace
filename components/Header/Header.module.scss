@@ -1,8 +1,9 @@
-/* components/Header.module.scss */
+/* styles/Header.module.scss */
 
 .header {
-  background-color: #3498db;
-  color: white;
-  padding: 1rem;
-  text-align: center;
+  background: #4caf50; // Green background color
+}
+
+.title {
+  flex-grow: 1;
 }
