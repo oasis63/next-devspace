@@ -19,16 +19,7 @@ import HomeIcon from "@mui/icons-material/Home";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle"; // Import AccountCircleIcon
 import { User } from "@/utils/models";
 import ProfileAvatar from "../ProfileAvatar/ProfileAvatar";
-
-interface HeaderProps {
-  cities: string[];
-  likedProfilesCount: number;
-  dislikedProfilesCount: number;
-  loggedInUser: User;
-  onCityFilterChange: (selectedCity: string) => void;
-  onLikedProfilesClick: (e: any) => void;
-  onDislikedProfilesClick: (e: any) => void;
-}
+import { HeaderProps } from "./typings";
 
 const Header: React.FC<HeaderProps> = ({
   cities,

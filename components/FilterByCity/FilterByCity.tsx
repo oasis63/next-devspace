@@ -9,11 +9,7 @@ import {
   SelectChangeEvent,
 } from "@mui/material";
 import styles from "./FilterByCity.module.scss";
-
-interface FilterByCityProps {
-  cities: string[]; // Pass the list of cities as props
-  onFilterChange: (selectedCity: string) => void;
-}
+import { FilterByCityProps } from "./typings";
 
 const FilterByCity: React.FC<FilterByCityProps> = ({
   cities,

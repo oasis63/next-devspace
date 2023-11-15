@@ -3,10 +3,7 @@
 import styles from "./UserProfile.module.scss";
 import { User } from "@/utils/models";
 import { Container, Typography, Avatar, Grid } from "@mui/material";
-
-interface UserProfileProps {
-  user: User;
-}
+import { UserProfileProps } from "./typings";
 
 const UserProfile = ({ user }: UserProfileProps) => {
   return (

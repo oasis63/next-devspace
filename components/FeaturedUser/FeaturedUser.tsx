@@ -10,10 +10,7 @@ import {
   styled,
 } from "@mui/material";
 import { User } from "@/utils/models";
-
-interface FeaturedUserProps {
-  user: User;
-}
+import { FeaturedUserProps } from "./typings";
 
 const FeaturedUserContainer = styled(Container)({
   marginTop: "32px",

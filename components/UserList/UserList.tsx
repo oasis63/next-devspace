@@ -14,10 +14,7 @@ import {
 import { User } from "@/utils/models";
 import FeaturedUser from "../FeaturedUser/FeaturedUser";
 import UserCard from "../UserCard/UserCard";
-
-interface UserListProps {
-  users: User[];
-}
+import { UserListProps } from "./typings";
 
 const UserList: React.FC<UserListProps> = ({ users }) => {
   const handleLike = (userId: any) => {

@@ -15,12 +15,7 @@ import FavoriteIcon from "@mui/icons-material/Favorite";
 import ThumbDownIcon from "@mui/icons-material/ThumbDown";
 import CheckIcon from "@mui/icons-material/Check";
 import CloseIcon from "@mui/icons-material/Close";
-
-interface UserCardProps {
-  user: User;
-  onLike: () => void;
-  onDislike: () => void;
-}
+import { UserCardProps } from "./typings";
 
 const StyledUserCard = styled(Card)({
   display: "flex",
