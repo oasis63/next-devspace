@@ -18,6 +18,7 @@ import ThumbDownIcon from "@mui/icons-material/ThumbDown";
 import HomeIcon from "@mui/icons-material/Home";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle"; // Import AccountCircleIcon
 import { User } from "@/utils/models";
+import ProfileAvatar from "../ProfileAvatar/ProfileAvatar";
 
 interface HeaderProps {
   cities: string[];
@@ -61,13 +62,6 @@ const Header: React.FC<HeaderProps> = ({
           </Badge>
         </IconButton>
 
-        {/* <Link href="/">
-          <Button color="inherit">Home</Button>
-        </Link>
-        <Link href="/profile">
-          <Button color="inherit">Profile</Button>
-        </Link> */}
-        {/* Home Link */}
         <Link href="/">
           <IconButton color="inherit">
             <HomeIcon />
@@ -75,17 +69,7 @@ const Header: React.FC<HeaderProps> = ({
         </Link>
         {/* Profile Link with Profile Photo */}
         <Link href="/profile">
-          <IconButton color="inherit">
-            {loggedInUser?.profilePhotoUrl ? (
-              <img
-                src={loggedInUser?.profilePhotoUrl}
-                alt="Profile"
-                className={styles.profilePhoto}
-              />
-            ) : (
-              <AccountCircleIcon />
-            )}
-          </IconButton>
+          <ProfileAvatar profilePhotoUrl={loggedInUser.profilePhotoUrl} />
         </Link>
         {/* Add more navigation links as needed */}
       </Toolbar>
