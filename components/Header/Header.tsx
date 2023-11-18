@@ -29,6 +29,7 @@ const Header: React.FC<HeaderProps> = ({
   onCityFilterChange,
   onLikedProfilesClick,
   onDislikedProfilesClick,
+  onHomeClick,
 }) => {
   return (
     <AppBar position="static" className={styles.header}>
