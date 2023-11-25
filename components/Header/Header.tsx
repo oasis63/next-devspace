@@ -24,19 +24,28 @@ import { HeaderProps } from "./typings";
 import { useRouter } from "next/router";
 // import { useRouter } from "next/navigation";
 import { useDatingStore, useHeaderStore } from "@/store";
+import { filterUserProfiles } from "@/utils/helpers";
 
 const Header: React.FC<HeaderProps> = ({ onCityFilterChange }) => {
   const router = useRouter();
   const { cities } = useHeaderStore();
 
-  const { loggedInUser, totalUserProfiles, currentUserProfiles } =
-    useDatingStore();
+  const {
+    loggedInUser,
+    totalUserProfiles,
+    currentUserProfiles,
+    setCurrentUserProfiles,
+  } = useDatingStore();
 
   const loadHomePage = () => {
+    setCurrentUserProfiles(totalUserProfiles);
     router.push("/");
   };
 
   const showDislikedProfiles = () => {
+    setCurrentUserProfiles(
+      filterUserProfiles(totalUserProfiles, loggedInUser, "disliked")
+    );
     router.push({
       pathname: "/",
       query: { profiles: "disliked" },
@@ -44,6 +53,9 @@ const Header: React.FC<HeaderProps> = ({ onCityFilterChange }) => {
   };
 
   const showLikedProfiles = () => {
+    setCurrentUserProfiles(
+      filterUserProfiles(totalUserProfiles, loggedInUser, "liked")
+    );
     router.push({
       pathname: "/",
       query: { profiles: "liked" },
