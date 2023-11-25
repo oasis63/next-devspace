@@ -20,48 +20,74 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle"; // Import Acc
 import { User } from "@/utils/models";
 import ProfileAvatar from "../ProfileAvatar/ProfileAvatar";
 import { HeaderProps } from "./typings";
+// import { useHeaderStore } from "@/store/headerStore";
+import { useRouter } from "next/router";
+// import { useRouter } from "next/navigation";
+import { useDatingStore, useHeaderStore } from "@/store";
 
-const Header: React.FC<HeaderProps> = ({
-  cities,
-  loggedInUser,
-  likedProfilesCount,
-  dislikedProfilesCount,
-  onCityFilterChange,
-  onLikedProfilesClick,
-  onDislikedProfilesClick,
-  onHomeClick,
-}) => {
+const Header: React.FC<HeaderProps> = ({ onCityFilterChange }) => {
+  const router = useRouter();
+  const { cities } = useHeaderStore();
+
+  const { loggedInUser, totalUserProfiles, currentUserProfiles } =
+    useDatingStore();
+
+  const loadHomePage = () => {
+    router.push("/");
+  };
+
+  const showDislikedProfiles = () => {
+    router.push({
+      pathname: "/",
+      query: { profiles: "disliked" },
+    });
+  };
+
+  const showLikedProfiles = () => {
+    router.push({
+      pathname: "/",
+      query: { profiles: "liked" },
+    });
+  };
+
   return (
     <AppBar position="static" className={styles.header}>
       <Toolbar>
         <Typography variant="h6" component="div" className={styles.title}>
-          Dating App
+          {/* Dating App */}
+          <Button variant="outlined" onClick={loadHomePage}>
+            Dating App
+          </Button>
         </Typography>
         <SearchBar />
         <FilterByCity cities={cities} onFilterChange={onCityFilterChange} />
-
-        {/* Liked Profiles Button */}
-        <IconButton color="inherit" onClick={onLikedProfilesClick}>
-          <Badge badgeContent={likedProfilesCount} color="error">
+        {/* Liked Profiles Button */}{" "}
+        {/* <IconButton color="inherit" onClick={onDislikedProfilesClick}> */}
+        <IconButton color="inherit" onClick={showLikedProfiles}>
+          <Badge
+            badgeContent={loggedInUser?.likedProfiles?.length || 0}
+            color="error"
+          >
             <FavoriteIcon />
           </Badge>
         </IconButton>
-
         {/* Disliked Profiles Button */}
-        <IconButton color="inherit" onClick={onDislikedProfilesClick}>
-          <Badge badgeContent={dislikedProfilesCount} color="error">
+        <IconButton color="inherit" onClick={showDislikedProfiles}>
+          <Badge
+            badgeContent={loggedInUser?.dislikedProfiles?.length || 0}
+            color="error"
+          >
             <ThumbDownIcon />
           </Badge>
         </IconButton>
-
-        <Link href="/">
-          <IconButton color="inherit">
-            <HomeIcon />
-          </IconButton>
-        </Link>
+        {/* <Link href="/"> */}
+        <IconButton color="inherit" onClick={loadHomePage}>
+          <HomeIcon />
+        </IconButton>
+        {/* </Link> */}
         {/* Profile Link with Profile Photo */}
         <Link href="/profile">
-          <ProfileAvatar profilePhotoUrl={loggedInUser.profilePhotoUrl} />
+          <ProfileAvatar profilePhotoUrl={loggedInUser?.profilePhotoUrl} />
         </Link>
         {/* Add more navigation links as needed */}
       </Toolbar>

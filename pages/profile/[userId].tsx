@@ -38,7 +38,7 @@ const UserProfilePage: React.FC = () => {
 
     //   return () => clearTimeout(delay);
     // }
-    // fetchUserData();Marry Jane
+    fetchUserData();
   }, [userId]);
 
   if (!userId || !user) {
@@ -47,7 +47,7 @@ const UserProfilePage: React.FC = () => {
 
   return (
     <div>
-      <Header />
+      {/* <Header /> */}
       <UserProfile user={mockUser} />
     </div>
   );

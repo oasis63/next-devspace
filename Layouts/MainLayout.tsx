@@ -1,19 +1,45 @@
-// pages/index.tsx
-
-import FeaturedUser from "@/components/FeaturedUser/FeaturedUser";
+// components/Layout.tsx
 import FooterMui from "@/components/FooterMui/FooterMui";
 import Header from "@/components/Header/Header";
-import UserList from "@/components/UserList/UserList";
-import { useDatingStore } from "@/store";
+import { useDatingStore, useHeaderStore } from "@/store";
+// import { useHeaderStore } from "@/store/headerStore";
+// import useLayoutEvents from "@/hooks/useLayoutEvents";
 import { mockUsers } from "@/testDatas/mockUsers";
 import { User } from "@/utils/models";
-import Link from "next/link";
-import { useEffect, useState } from "react";
+import { Container } from "@mui/material";
+import { useRouter } from "next/router";
+import React, { ReactNode, useEffect, useState } from "react";
+// import { usePathname, useRouter } from "next/navigation";
 
-const cities = ["New York", "Los Angeles", "London", "Paris", "Tokyo"];
+interface LayoutProps {
+  children: ReactNode;
+}
+const citiesData = ["New York", "Los Angeles", "London", "Paris", "Tokyo"];
 
-const Home = () => {
-  // const { layoutEvent } = useLayoutEvents();
+const MainLayout: React.FC<LayoutProps> = ({ children }) => {
+  // const { layoutEvent, handleLayoutEvent } = useLayoutEvents();
+
+  const router = useRouter();
+  const pathname = router.pathname;
+
+  //console.log("router : ", router);
+  //console.log("pathname : ", pathname);
+
+  const { setCities } = useHeaderStore();
+
+  const {
+    totalUserProfiles,
+    currentUserProfiles,
+    getTotalUserProfiles,
+    setLoggedInUser,
+    setCurrentUserProfiles,
+  } = useDatingStore();
+
+  useEffect(() => {
+    (async () => {
+      await getTotalUserProfiles();
+    })();
+  }, [getTotalUserProfiles]);
 
   const loggedInUser: User = {
     userId: "1",
@@ -41,6 +67,33 @@ const Home = () => {
     likedProfiles: ["2", "4", "1"],
     dislikedProfiles: ["3"],
   };
+
+  // ikedProfilesCount={loggedInUser.likedProfiles?.length || 0}
+  // dislikedProfilesCount={loggedInUser.dislikedProfiles?.length || 0}
+
+  useEffect(() => {
+    setCities(citiesData);
+    setLoggedInUser(loggedInUser);
+  }, []);
+
+  useEffect(() => {
+    //console.log("router changed ");
+    //console.log("router : ", router);
+    if (router && router.pathname == "/") {
+      const queryRef = router?.query;
+      const profileVal = queryRef?.profiles;
+      if (queryRef && profileVal) {
+        if (profileVal == "liked") {
+          //console.log("render liked profiles");
+        } else if (profileVal == "disliked") {
+          //console.log("render disliked profiles");
+        }
+      } else {
+        //console.log("render all the profiles");
+        // setCities(cities);
+      }
+    }
+  }, [router]);
 
   const [users, setUsers] = useState<User[]>([]);
 
@@ -75,11 +128,17 @@ const Home = () => {
     const users = mockUsers.filter((user) =>
       loggedInUser.likedProfiles?.includes(user.userId)
     );
-    setUsers(cityUsers);
+    setUsers(users);
+    // handleLayoutEvent(users);
   };
 
   const handleDislikedProfilesClick = (event: any) => {
     console.log("handleDislikedProfilesClick event : ", event);
+
+    const users = mockUsers.filter((user) =>
+      loggedInUser.dislikedProfiles?.includes(user.userId)
+    );
+    setUsers(users);
 
     // navigate to disliked profiles page
     // or rendered the disliked profiles on the home page
@@ -115,26 +174,21 @@ const Home = () => {
     setUsers(mockUsers);
   }, []);
 
-  // useEffect(() => {
-  //   if (layoutEvent) {
-  //     // Handle the event in index.tsx
-  //     console.log("Event from MainLayout:", layoutEvent);
-  //     // Add your logic here
-  //   }
-  // }, [layoutEvent]);
-
-  const totalUserProfiles = useDatingStore((store) => store.totalUserProfiles);
-  const currentUserProfiles = useDatingStore(
-    (store) => store.currentUserProfiles
-  );
-
   return (
     <>
-      <UserList users={currentUserProfiles} />
+      <Header
+        // cities={cities}
+        // loggedInUser={loggedInUser}
+        // likedProfilesCount={loggedInUser.likedProfiles?.length || 0}
+        // dislikedProfilesCount={loggedInUser.dislikedProfiles?.length || 0}
+        onCityFilterChange={handleCityFilterChange}
+        // onLikedProfilesClick={handleLikedProfilesClick}
+        // onDislikedProfilesClick={handleDislikedProfilesClick}
+      />
+      <Container maxWidth="lg">{children}</Container>
+      <FooterMui />
     </>
   );
 };
 
-export default Home;
-
-// this is the center part of the index.tsx or home page ..
+export default MainLayout;
