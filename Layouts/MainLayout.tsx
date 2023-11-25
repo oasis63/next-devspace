@@ -197,15 +197,7 @@ const MainLayout: React.FC<LayoutProps> = ({ children }) => {
 
   return (
     <>
-      <Header
-        // cities={cities}
-        // loggedInUser={loggedInUser}
-        // likedProfilesCount={loggedInUser.likedProfiles?.length || 0}
-        // dislikedProfilesCount={loggedInUser.dislikedProfiles?.length || 0}
-        onCityFilterChange={handleCityFilterChange}
-        // onLikedProfilesClick={handleLikedProfilesClick}
-        // onDislikedProfilesClick={handleDislikedProfilesClick}
-      />
+      <Header />
       <Container maxWidth="lg">{children}</Container>
       <FooterMui />
     </>

@@ -9,11 +9,10 @@ import {
   SelectChangeEvent,
 } from "@mui/material";
 import styles from "./FilterByCity.module.scss";
-import { FilterByCityProps } from "./typings";
 import { useDatingStore } from "@/store";
 import { filterUserProfiles } from "@/utils/helpers";
 
-const FilterByCity: React.FC<FilterByCityProps> = () => {
+const FilterByCity = () => {
   const [selectedCity, setSelectedCity] = useState<string>("");
 
   const {
@@ -24,13 +23,9 @@ const FilterByCity: React.FC<FilterByCityProps> = () => {
     loggedInUser,
   } = useDatingStore();
 
-  const handleCityChange = (
-    event: SelectChangeEvent<string>,
-    child: ReactNode
-  ) => {
+  const handleCityChange = (event: SelectChangeEvent<string>) => {
     const city = event.target.value as string;
     setSelectedCity(city);
-    // onFilterChange(city);
     setCurrentCity(city);
     setCurrentUserProfiles(
       filterUserProfiles(totalUserProfiles, loggedInUser, "filterByCity", city)

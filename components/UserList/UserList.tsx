@@ -1,18 +1,6 @@
 // components/UserList.tsx
 
-import React, { useEffect, useState } from "react";
-import {
-  Container,
-  Typography,
-  Grid,
-  Avatar,
-  Card,
-  CardContent,
-  styled,
-  Box,
-} from "@mui/material";
-import { User } from "@/utils/models";
-import FeaturedUser from "../FeaturedUser/FeaturedUser";
+import { Container, Grid } from "@mui/material";
 import UserCard from "../UserCard/UserCard";
 import { UserListProps } from "./typings";
 

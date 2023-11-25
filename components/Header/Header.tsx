@@ -17,18 +17,13 @@ import FavoriteIcon from "@mui/icons-material/Favorite";
 import ThumbDownIcon from "@mui/icons-material/ThumbDown";
 import HomeIcon from "@mui/icons-material/Home";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle"; // Import AccountCircleIcon
-import { User } from "@/utils/models";
 import ProfileAvatar from "../ProfileAvatar/ProfileAvatar";
-import { HeaderProps } from "./typings";
-// import { useHeaderStore } from "@/store/headerStore";
 import { useRouter } from "next/router";
-// import { useRouter } from "next/navigation";
 import { useDatingStore, useHeaderStore } from "@/store";
 import { filterUserProfiles } from "@/utils/helpers";
 
-const Header: React.FC<HeaderProps> = ({ onCityFilterChange }) => {
+const Header = () => {
   const router = useRouter();
-  // const { cities } = useHeaderStore();
 
   const {
     loggedInUser,
