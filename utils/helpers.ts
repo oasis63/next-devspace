@@ -17,9 +17,15 @@ export function generateSecureUserId() {
 export const filterUserProfiles = (
   allUsers: User[],
   loggedInUser: User | null,
-  filterType: string
+  filterType: string,
+  cityName?: string
 ) => {
-  if (filterType == "liked") {
+  if (filterType == "filterByCity") {
+    console.log("filterByCity ");
+    console.log(cityName);
+    if (!cityName) return allUsers;
+    return allUsers.filter((user) => user?.location?.city == cityName);
+  } else if (filterType == "liked") {
     return allUsers.filter((user) =>
       loggedInUser?.likedProfiles?.includes(user.userId)
     );

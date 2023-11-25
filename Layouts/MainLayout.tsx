@@ -5,6 +5,7 @@ import { useDatingStore, useHeaderStore } from "@/store";
 // import { useHeaderStore } from "@/store/headerStore";
 // import useLayoutEvents from "@/hooks/useLayoutEvents";
 import { mockUsers } from "@/testDatas/mockUsers";
+import { filterUserProfiles } from "@/utils/helpers";
 import { User } from "@/utils/models";
 import { Container } from "@mui/material";
 import { useRouter } from "next/router";
@@ -14,7 +15,13 @@ import React, { ReactNode, useEffect, useState } from "react";
 interface LayoutProps {
   children: ReactNode;
 }
-const citiesData = ["New York", "Los Angeles", "London", "Paris", "Tokyo"];
+const citiesData = [
+  "New York",
+  "Los Angeles",
+  "San Francisco",
+  "Paris",
+  "Denver",
+];
 
 const MainLayout: React.FC<LayoutProps> = ({ children }) => {
   // const { layoutEvent, handleLayoutEvent } = useLayoutEvents();
@@ -25,11 +32,13 @@ const MainLayout: React.FC<LayoutProps> = ({ children }) => {
   //console.log("router : ", router);
   //console.log("pathname : ", pathname);
 
-  const { setCities } = useHeaderStore();
+  // const { setCities } = useHeaderStore();
 
   const {
     totalUserProfiles,
     currentUserProfiles,
+    currentCity,
+    setCities,
     getTotalUserProfiles,
     setLoggedInUser,
     setCurrentUserProfiles,
@@ -173,6 +182,18 @@ const MainLayout: React.FC<LayoutProps> = ({ children }) => {
     // For now, let's mock some data
     setUsers(mockUsers);
   }, []);
+
+  // useEffect(() => {
+  //   console.log("currentCity : changed : ", currentCity);
+  //   setCurrentUserProfiles(
+  //     filterUserProfiles(
+  //       totalUserProfiles,
+  //       loggedInUser,
+  //       "filterByCity",
+  //       currentCity
+  //     )
+  //   );
+  // }, [currentCity]);
 
   return (
     <>

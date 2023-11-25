@@ -10,6 +10,8 @@ import {
 } from "@mui/material";
 import styles from "./FilterByCity.module.scss";
 import { FilterByCityProps } from "./typings";
+import { useDatingStore } from "@/store";
+import { filterUserProfiles } from "@/utils/helpers";
 
 const FilterByCity: React.FC<FilterByCityProps> = ({
   cities,
@@ -17,13 +19,24 @@ const FilterByCity: React.FC<FilterByCityProps> = ({
 }) => {
   const [selectedCity, setSelectedCity] = useState<string>("");
 
+  const {
+    setCurrentCity,
+    setCurrentUserProfiles,
+    totalUserProfiles,
+    loggedInUser,
+  } = useDatingStore();
+
   const handleCityChange = (
     event: SelectChangeEvent<string>,
     child: ReactNode
   ) => {
     const city = event.target.value as string;
     setSelectedCity(city);
-    onFilterChange(city);
+    // onFilterChange(city);
+    setCurrentCity(city);
+    setCurrentUserProfiles(
+      filterUserProfiles(totalUserProfiles, loggedInUser, "filterByCity", city)
+    );
   };
   return (
     <FormControl className={styles.filterByCity}>
@@ -39,7 +52,7 @@ const FilterByCity: React.FC<FilterByCityProps> = ({
         <MenuItem value="">
           <em>All</em>
         </MenuItem>
-        {cities.map((city) => (
+        {cities?.map((city) => (
           <MenuItem key={city} value={city}>
             {city}
           </MenuItem>

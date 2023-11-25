@@ -28,10 +28,11 @@ import { filterUserProfiles } from "@/utils/helpers";
 
 const Header: React.FC<HeaderProps> = ({ onCityFilterChange }) => {
   const router = useRouter();
-  const { cities } = useHeaderStore();
+  // const { cities } = useHeaderStore();
 
   const {
     loggedInUser,
+    cities,
     totalUserProfiles,
     currentUserProfiles,
     setCurrentUserProfiles,

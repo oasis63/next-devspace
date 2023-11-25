@@ -7,14 +7,16 @@ interface DatingStore {
   users: User[];
   totalUserProfiles: User[];
   currentUserProfiles: User[];
-  // cities: string[];
+  cities: string[];
+  currentCity: string;
   loggedInUser: User | null;
   isLoading: boolean;
   error: any;
+  setCurrentCity: (city: string) => void;
   setUsers: (users: User[]) => void;
   getTotalUserProfiles: (users?: User[]) => void;
   setCurrentUserProfiles: (currentUsers: User[]) => void;
-  // setCities: (cities: string[]) => void;
+  setCities: (cities: string[]) => void;
   setLoggedInUser: (user: User | null) => void;
 }
 
@@ -22,12 +24,14 @@ export const useDatingStore = create<DatingStore>((set, get) => ({
   users: [],
   totalUserProfiles: [],
   currentUserProfiles: [],
-  // cities: [],
+  cities: [],
   loggedInUser: null,
   isLoading: false,
   error: null,
+  currentCity: "",
+  setCurrentCity: (city) => set({ currentCity: city }),
   setUsers: (users) => set({ users: users }),
-  // setCities: (cities) => set({ cities: cities }),
+  setCities: (cities) => set({ cities: cities }),
   setLoggedInUser: (user) => set({ loggedInUser: user }),
   getTotalUserProfiles: async (users?) => {
     // async
