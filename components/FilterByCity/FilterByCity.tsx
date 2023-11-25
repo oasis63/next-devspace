@@ -13,13 +13,11 @@ import { FilterByCityProps } from "./typings";
 import { useDatingStore } from "@/store";
 import { filterUserProfiles } from "@/utils/helpers";
 
-const FilterByCity: React.FC<FilterByCityProps> = ({
-  cities,
-  onFilterChange,
-}) => {
+const FilterByCity: React.FC<FilterByCityProps> = () => {
   const [selectedCity, setSelectedCity] = useState<string>("");
 
   const {
+    cities,
     setCurrentCity,
     setCurrentUserProfiles,
     totalUserProfiles,

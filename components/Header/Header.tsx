@@ -73,7 +73,7 @@ const Header: React.FC<HeaderProps> = ({ onCityFilterChange }) => {
           </Button>
         </Typography>
         <SearchBar />
-        <FilterByCity cities={cities} onFilterChange={onCityFilterChange} />
+        <FilterByCity />
         {/* Liked Profiles Button */}{" "}
         {/* <IconButton color="inherit" onClick={onDislikedProfilesClick}> */}
         <IconButton color="inherit" onClick={showLikedProfiles}>
