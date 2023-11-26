@@ -66,6 +66,15 @@ const Header = () => {
           <Button variant="outlined" onClick={loadHomePage}>
             Dating App
           </Button>
+
+          {!loggedInUser?.location?.geoCoordinates?.latitude ? (
+            "Location loading"
+          ) : (
+            <Typography>
+              Lat : {loggedInUser?.location?.geoCoordinates?.latitude} {"  "}
+              Long : {loggedInUser?.location?.geoCoordinates?.longitude}
+            </Typography>
+          )}
         </Typography>
         <SearchBar />
         <FilterByCity />

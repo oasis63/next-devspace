@@ -2,7 +2,8 @@
 import FooterMui from "@/components/FooterMui/FooterMui";
 import Header from "@/components/Header/Header";
 import { useDatingStore } from "@/store";
-import { User } from "@/utils/models";
+import { getGeoCoordinates } from "@/utils/helpers";
+import { GeoCoordinates, User } from "@/utils/models";
 import { Container } from "@mui/material";
 import { useRouter } from "next/router";
 import { ReactNode, useEffect, useState } from "react";
@@ -59,6 +60,18 @@ const MainLayout: React.FC<LayoutProps> = ({ children }) => {
     dislikedProfiles: ["3"],
   };
 
+  const getUserGeolocation = async () => {
+    try {
+      const geoCoordinates: GeoCoordinates = await getGeoCoordinates();
+      setLoggedInUser({
+        ...loggedInUser,
+        location: { ...loggedInUser.location, geoCoordinates },
+      });
+    } catch (error: any) {
+      console.error(error.message);
+    }
+  };
+
   useEffect(() => {
     (async () => {
       await getTotalUserProfiles();
@@ -66,6 +79,7 @@ const MainLayout: React.FC<LayoutProps> = ({ children }) => {
   }, [getTotalUserProfiles]);
 
   useEffect(() => {
+    getUserGeolocation();
     setCities(citiesData);
     setLoggedInUser(loggedInUser);
   }, []);

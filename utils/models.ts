@@ -1,3 +1,15 @@
+export interface GeoCoordinates {
+  latitude: number;
+  longitude: number;
+}
+
+export interface Location {
+  geoCoordinates?: GeoCoordinates;
+  city?: string;
+  state?: string;
+  country?: string;
+}
+
 export interface User {
   userId?: string;
   username?: string;
@@ -5,11 +17,7 @@ export interface User {
   age?: number;
   email?: string;
   phone?: string;
-  location?: {
-    city?: string;
-    state?: string;
-    country?: string;
-  };
+  location?: Location;
   interests?: string[];
   matchingPreference?: {
     age?: {
