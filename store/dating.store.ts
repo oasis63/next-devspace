@@ -39,12 +39,11 @@ export const useDatingStore = create<DatingStore>((set, get) => ({
     try {
       set({ isLoading: true });
       // const response = await fetch("/api/users/crudUsers");
-      // const response = await fetch("/api/users/crudUsers");
       // console.log("total user profiles response ", response);
       set({
         isLoading: false,
         totalUserProfiles: mockUsers,
-        currentUserProfiles: mockUsers,
+        // currentUserProfiles: mockUsers,
       });
       // console.log(
       //   "total user profiles totalUserProfiles ",

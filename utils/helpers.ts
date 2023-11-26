@@ -27,15 +27,22 @@ export const filterUserProfiles = (
     return allUsers.filter((user) => user?.location?.city == cityName);
   } else if (filterType == "liked") {
     return allUsers.filter((user) =>
-      loggedInUser?.likedProfiles?.includes(user.userId)
+      loggedInUser?.likedProfiles?.includes(user.userId || "")
     );
   } else if (filterType == "disliked") {
     return allUsers.filter((user) =>
-      loggedInUser?.dislikedProfiles?.includes(user.userId)
+      loggedInUser?.dislikedProfiles?.includes(user.userId || "")
     );
   } else {
     return allUsers;
   }
+};
+
+export const filterProfilesForGivenIds = (
+  usersList: User[],
+  userIds: string[]
+) => {
+  return usersList.filter((user) => !userIds?.includes(user.userId));
 };
 
 // Function to convert degrees to radians

@@ -20,7 +20,7 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle"; // Import Acc
 import ProfileAvatar from "../ProfileAvatar/ProfileAvatar";
 import { useRouter } from "next/router";
 import { useDatingStore, useHeaderStore } from "@/store";
-import { filterUserProfiles } from "@/utils/helpers";
+import { filterProfilesForGivenIds, filterUserProfiles } from "@/utils/helpers";
 
 const Header = () => {
   const router = useRouter();
@@ -34,7 +34,12 @@ const Header = () => {
   } = useDatingStore();
 
   const loadHomePage = () => {
-    setCurrentUserProfiles(totalUserProfiles);
+    setCurrentUserProfiles(
+      filterProfilesForGivenIds(totalUserProfiles, [
+        ...loggedInUser?.likedProfiles,
+        ...loggedInUser?.dislikedProfiles,
+      ])
+    );
     router.push("/");
   };
 

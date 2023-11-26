@@ -3,13 +3,13 @@ import UserList from "@/components/UserList/UserList";
 import { useDatingStore } from "@/store";
 
 const Home = () => {
-  const totalUserProfiles = useDatingStore((store) => store.totalUserProfiles);
-  const currentUserProfiles = useDatingStore(
-    (store) => store.currentUserProfiles
-  );
+  // const totalUserProfiles = useDatingStore((store) => store.totalUserProfiles);
+  // const currentUserProfiles = useDatingStore(
+  //   (store) => store.currentUserProfiles
+  // );
   return (
     <>
-      <UserList users={currentUserProfiles} />
+      <UserList />
     </>
   );
 };

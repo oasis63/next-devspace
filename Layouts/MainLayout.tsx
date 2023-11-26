@@ -2,7 +2,7 @@
 import FooterMui from "@/components/FooterMui/FooterMui";
 import Header from "@/components/Header/Header";
 import { useDatingStore } from "@/store";
-import { getGeoCoordinates } from "@/utils/helpers";
+import { filterProfilesForGivenIds, getGeoCoordinates } from "@/utils/helpers";
 import { GeoCoordinates, User } from "@/utils/models";
 import { Container } from "@mui/material";
 import { useRouter } from "next/router";
@@ -25,8 +25,6 @@ const MainLayout: React.FC<LayoutProps> = ({ children }) => {
 
   const {
     totalUserProfiles,
-    currentUserProfiles,
-    currentCity,
     setCities,
     getTotalUserProfiles,
     setLoggedInUser,
@@ -83,6 +81,16 @@ const MainLayout: React.FC<LayoutProps> = ({ children }) => {
     setCities(citiesData);
     setLoggedInUser(loggedInUser);
   }, []);
+
+  useEffect(() => {
+    // setCurrentUserProfiles([...totalUserProfiles]);
+    setCurrentUserProfiles(
+      filterProfilesForGivenIds(totalUserProfiles, [
+        ...loggedInUser.dislikedProfiles,
+        ...loggedInUser.likedProfiles,
+      ])
+    );
+  }, [totalUserProfiles]);
 
   useEffect(() => {
     //console.log("router changed ");

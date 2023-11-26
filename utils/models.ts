@@ -11,7 +11,7 @@ export interface Location {
 }
 
 export interface User {
-  userId?: string;
+  userId: string;
   username?: string;
   name?: string;
   age?: number;
@@ -30,6 +30,6 @@ export interface User {
   photos?: string[]; // string arrays of base64 values
   profilePhotoUrl?: string;
   password?: string;
-  likedProfiles?: any[];
-  dislikedProfiles?: any[];
+  likedProfiles?: string[];
+  dislikedProfiles?: string[];
 }
