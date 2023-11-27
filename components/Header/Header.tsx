@@ -36,8 +36,8 @@ const Header = () => {
   const loadHomePage = () => {
     setCurrentUserProfiles(
       filterProfilesForGivenIds(totalUserProfiles, [
-        ...loggedInUser?.likedProfiles,
-        ...loggedInUser?.dislikedProfiles,
+        ...(loggedInUser?.likedProfiles as string[]),
+        ...(loggedInUser?.dislikedProfiles as string[]),
       ])
     );
     router.push("/");
