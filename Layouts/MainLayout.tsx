@@ -86,8 +86,8 @@ const MainLayout: React.FC<LayoutProps> = ({ children }) => {
     // setCurrentUserProfiles([...totalUserProfiles]);
     setCurrentUserProfiles(
       filterProfilesForGivenIds(totalUserProfiles, [
-        ...loggedInUser.dislikedProfiles,
-        ...loggedInUser.likedProfiles,
+        ...(loggedInUser.dislikedProfiles as string[]),
+        ...(loggedInUser.likedProfiles as string[]),
       ])
     );
   }, [totalUserProfiles]);
