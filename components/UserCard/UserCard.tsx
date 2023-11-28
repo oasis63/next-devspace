@@ -17,6 +17,7 @@ import CheckIcon from "@mui/icons-material/Check";
 import CloseIcon from "@mui/icons-material/Close";
 import { UserCardProps } from "./typings";
 import { useDatingStore } from "@/store";
+import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
 
 const StyledUserCard = styled(Card)({
   position: "relative",
@@ -78,11 +79,16 @@ const CloseButton = styled(IconButton)({
   right: "8px",
 });
 
+const MessageButton = styled(IconButton)({
+  marginRight: "8px",
+});
+
 const UserCard: React.FC<UserCardProps> = ({
   user,
   onLike,
   onDislike,
   onRemove,
+  onMessage,
 }) => {
   const { currentPage } = useDatingStore();
 
@@ -100,15 +106,20 @@ const UserCard: React.FC<UserCardProps> = ({
       <Typography variant="body2">Location: {user?.location?.city}</Typography>
       <UserInterests>Interests: {user?.interests?.join(", ")}</UserInterests>
       <ActionButtonsContainer>
-        {currentPage != "/disliked" && (
+        {currentPage !== "/disliked" && (
           <IconButton color="secondary" onClick={onDislike}>
             <ThumbDownIcon />
           </IconButton>
         )}
-        {currentPage != "/liked" && (
+        {currentPage !== "/liked" && (
           <IconButton color="primary" onClick={onLike}>
             <FavoriteIcon />
           </IconButton>
+        )}
+        {currentPage === "/liked" && (
+          <MessageButton color="primary" onClick={onMessage}>
+            <ChatBubbleOutlineIcon />
+          </MessageButton>
         )}
       </ActionButtonsContainer>
     </StyledUserCard>

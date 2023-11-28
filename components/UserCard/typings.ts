@@ -5,4 +5,5 @@ export interface UserCardProps {
   onLike: () => void;
   onDislike: () => void;
   onRemove: () => void;
+  onMessage: () => void;
 }

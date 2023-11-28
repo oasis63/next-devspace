@@ -65,6 +65,10 @@ const UserList = () => {
     updateProfile(userId, likeUnlikeProperty, "");
   };
 
+  const handleUserChat = (userId: string) => {
+    console.log("start chatting with userId : ", userId);
+  };
+
   return (
     <Container>
       {!currentUserProfiles ? (
@@ -80,6 +84,7 @@ const UserList = () => {
                 onLike={() => handleLike(user?.userId)}
                 onDislike={() => handleDislike(user?.userId)}
                 onRemove={() => handleRemoveUser(user?.userId)}
+                onMessage={() => handleUserChat(user?.userId)}
               />
             </Grid>
           ))}
