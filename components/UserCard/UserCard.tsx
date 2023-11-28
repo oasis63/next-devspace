@@ -16,8 +16,10 @@ import ThumbDownIcon from "@mui/icons-material/ThumbDown";
 import CheckIcon from "@mui/icons-material/Check";
 import CloseIcon from "@mui/icons-material/Close";
 import { UserCardProps } from "./typings";
+import { useDatingStore } from "@/store";
 
 const StyledUserCard = styled(Card)({
+  position: "relative",
   display: "flex",
   flexDirection: "column",
   alignItems: "center",
@@ -70,31 +72,45 @@ const ConnectButton = styled(Button)({
   marginTop: "16px",
 });
 
-const UserCard: React.FC<UserCardProps> = ({ user, onLike, onDislike }) => {
+const CloseButton = styled(IconButton)({
+  position: "absolute",
+  top: "8px",
+  right: "8px",
+});
+
+const UserCard: React.FC<UserCardProps> = ({
+  user,
+  onLike,
+  onDislike,
+  onRemove,
+}) => {
+  const { currentPage } = useDatingStore();
+
   return (
     <StyledUserCard>
+      {currentPage != "/" && (
+        <CloseButton color="inherit" onClick={onRemove}>
+          <CloseIcon />
+        </CloseButton>
+      )}
+
       <UserAvatar src={user?.photos?.[0]} alt={user.name} />
       <Typography variant="h6">{user.name}</Typography>
       <Typography variant="body2">Age: {user.age}</Typography>
       <Typography variant="body2">Location: {user?.location?.city}</Typography>
       <UserInterests>Interests: {user?.interests?.join(", ")}</UserInterests>
       <ActionButtonsContainer>
-        <IconButton color="secondary" onClick={onDislike}>
-          <ThumbDownIcon />
-        </IconButton>
-        <IconButton color="primary" onClick={onLike}>
-          <FavoriteIcon />
-        </IconButton>
+        {currentPage != "/disliked" && (
+          <IconButton color="secondary" onClick={onDislike}>
+            <ThumbDownIcon />
+          </IconButton>
+        )}
+        {currentPage != "/liked" && (
+          <IconButton color="primary" onClick={onLike}>
+            <FavoriteIcon />
+          </IconButton>
+        )}
       </ActionButtonsContainer>
-
-      {/* <ActionButtonsContainer>
-        <DislikeButton onClick={onDislike}>
-          <CloseIcon />
-        </DislikeButton>
-        <LikeButton onClick={onLike}>
-          <CheckIcon />
-        </LikeButton>
-      </ActionButtonsContainer> */}
     </StyledUserCard>
   );
 };

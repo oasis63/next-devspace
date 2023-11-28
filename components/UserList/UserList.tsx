@@ -6,11 +6,18 @@ import { UserListProps } from "./typings";
 import { useDatingStore } from "@/store";
 import { filterProfilesForGivenIds } from "@/utils/helpers";
 
+/*
+  currentUserProfiles .. 
+  handle this .. for disliked and liked profiles
+
+*/
+
 const UserList = () => {
   const {
     loggedInUser,
     currentUserProfiles,
     totalUserProfiles,
+    currentPage,
     setLoggedInUser,
     setCurrentUserProfiles,
   } = useDatingStore();
@@ -30,6 +37,11 @@ const UserList = () => {
       setLoggedInUser({
         ...loggedInUser,
         likedProfiles: [...loggedInUser.likedProfiles, userId],
+        ...(loggedInUser.dislikedProfiles?.includes(userId) && {
+          dislikedProfiles: loggedInUser.dislikedProfiles.filter(
+            (id: string) => id != userId
+          ),
+        }),
       });
     }
     removeUsersFromCurrentProfiles(userId);
@@ -41,10 +53,34 @@ const UserList = () => {
       setLoggedInUser({
         ...loggedInUser,
         dislikedProfiles: [...loggedInUser.dislikedProfiles, userId],
+        ...(loggedInUser.likedProfiles?.includes(userId) && {
+          likedProfiles: loggedInUser.likedProfiles.filter(
+            (id: string) => id != userId
+          ),
+        }),
       });
     }
     removeUsersFromCurrentProfiles(userId);
   };
+
+  const handleRemoveUser = (userId: string) => {
+    console.log("handle remove user : userId : ", userId);
+    const likeUnlikeProperty =
+      currentPage === "/liked" ? "likedProfiles" : "dislikedProfiles";
+
+    if (loggedInUser && loggedInUser[likeUnlikeProperty]) {
+      const updatedProfiles = loggedInUser[likeUnlikeProperty].filter(
+        (id: string) => id !== userId
+      );
+      setLoggedInUser({
+        ...loggedInUser,
+        [likeUnlikeProperty]: updatedProfiles,
+      });
+    }
+
+    removeUsersFromCurrentProfiles(userId);
+  };
+
   return (
     <Container>
       {!currentUserProfiles ? (
@@ -59,6 +95,7 @@ const UserList = () => {
                 user={user}
                 onLike={() => handleLike(user?.userId)}
                 onDislike={() => handleDislike(user?.userId)}
+                onRemove={() => handleRemoveUser(user?.userId)}
               />
             </Grid>
           ))}

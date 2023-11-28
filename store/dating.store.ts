@@ -12,6 +12,8 @@ interface DatingStore {
   loggedInUser: User | null;
   isLoading: boolean;
   error: any;
+  currentPage: string;
+  setCurrentPage: (pageName: string) => void;
   setCurrentCity: (city: string) => void;
   setUsers: (users: User[]) => void;
   getTotalUserProfiles: (users?: User[]) => void;
@@ -29,6 +31,8 @@ export const useDatingStore = create<DatingStore>((set, get) => ({
   isLoading: false,
   error: null,
   currentCity: "",
+  currentPage: "/",
+  setCurrentPage: (pageName: string) => set({ currentPage: pageName }),
   setCurrentCity: (city) => set({ currentCity: city }),
   setUsers: (users) => set({ users: users }),
   setCities: (cities) => set({ cities: cities }),
