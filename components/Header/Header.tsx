@@ -30,6 +30,8 @@ const Header = () => {
     cities,
     totalUserProfiles,
     currentUserProfiles,
+    currentPage,
+    setCurrentPage,
     setCurrentUserProfiles,
   } = useDatingStore();
 
@@ -40,6 +42,7 @@ const Header = () => {
         ...(loggedInUser?.dislikedProfiles as string[]),
       ])
     );
+    setCurrentPage("/");
     router.push("/");
   };
 
@@ -47,6 +50,7 @@ const Header = () => {
     setCurrentUserProfiles(
       filterUserProfiles(totalUserProfiles, loggedInUser, "disliked")
     );
+    setCurrentPage("/disliked");
     router.push({
       pathname: "/",
       query: { profiles: "disliked" },
@@ -57,6 +61,7 @@ const Header = () => {
     setCurrentUserProfiles(
       filterUserProfiles(totalUserProfiles, loggedInUser, "liked")
     );
+    setCurrentPage("/liked");
     router.push({
       pathname: "/",
       query: { profiles: "liked" },
