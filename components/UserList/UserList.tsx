@@ -6,12 +6,6 @@ import { UserListProps } from "./typings";
 import { useDatingStore } from "@/store";
 import { filterProfilesForGivenIds } from "@/utils/helpers";
 
-/*
-  currentUserProfiles .. 
-  handle this .. for disliked and liked profiles
-
-*/
-
 const UserList = () => {
   const {
     loggedInUser,
