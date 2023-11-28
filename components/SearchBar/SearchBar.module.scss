@@ -1,0 +1,16 @@
+.search-bar {
+  display: flex;
+  align-items: center;
+  width: 300px;
+  margin-left: auto;
+  margin-right: 16px;
+}
+
+.search-input {
+  margin-left: 8px;
+  flex: 1;
+}
+
+.search-icon {
+  color: #fff;
+}
