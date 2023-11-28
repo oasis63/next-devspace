@@ -33,4 +33,5 @@ export interface User {
   password?: string;
   likedProfiles?: string[];
   dislikedProfiles?: string[];
+  [key: string]: any;
 }
