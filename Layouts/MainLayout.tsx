@@ -71,16 +71,16 @@ const MainLayout: React.FC<LayoutProps> = ({ children }) => {
   };
 
   useEffect(() => {
-    (async () => {
-      await getTotalUserProfiles();
-    })();
-  }, [getTotalUserProfiles]);
-
-  useEffect(() => {
     getUserGeolocation();
     setCities(citiesData);
     setLoggedInUser(loggedInUser);
   }, []);
+
+  useEffect(() => {
+    (async () => {
+      await getTotalUserProfiles();
+    })();
+  }, [getTotalUserProfiles]);
 
   useEffect(() => {
     // setCurrentUserProfiles([...totalUserProfiles]);

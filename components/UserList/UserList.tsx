@@ -11,6 +11,7 @@ const UserList = () => {
     loggedInUser,
     currentUserProfiles,
     totalUserProfiles,
+    currentPage,
     setLoggedInUser,
     setCurrentUserProfiles,
   } = useDatingStore();
@@ -22,29 +23,52 @@ const UserList = () => {
     setCurrentUserProfiles([...fiteredUserProfiles]);
   };
 
-  const handleLike = (userId: any) => {
-    // Implement your logic to handle connecting with a user
-    console.log(`Liked the user ${userId}`);
+  const updateProfile = (
+    userId: string,
+    likeProperty: string,
+    unlikeProperty: string = ""
+  ) => {
+    if (loggedInUser && loggedInUser?.[likeProperty]) {
+      if (unlikeProperty != "") {
+        setLoggedInUser({
+          ...loggedInUser,
+          [likeProperty]: [...loggedInUser?.[likeProperty], userId],
+          ...(loggedInUser?.[unlikeProperty]?.includes(userId) && {
+            [unlikeProperty]: loggedInUser?.[unlikeProperty].filter(
+              (id: string) => id != userId
+            ),
+          }),
+        });
+      } else {
+        const updatedProfiles = loggedInUser?.[likeProperty].filter(
+          (id: string) => id !== userId
+        );
+        setLoggedInUser({
+          ...loggedInUser,
+          [likeProperty]: updatedProfiles,
+        });
+      }
+    }
+    removeUsersFromCurrentProfiles(userId);
+  };
 
-    if (loggedInUser && loggedInUser.likedProfiles) {
-      setLoggedInUser({
-        ...loggedInUser,
-        likedProfiles: [...loggedInUser.likedProfiles, userId],
-      });
-    }
-    removeUsersFromCurrentProfiles(userId);
+  const handleLike = (userId: string) => {
+    updateProfile(userId, "likedProfiles", "dislikedProfiles");
   };
-  const handleDislike = (userId: any) => {
-    // Implement your logic to handle connecting with a user
-    console.log(`Dislike the user ${userId}`);
-    if (loggedInUser && loggedInUser.dislikedProfiles) {
-      setLoggedInUser({
-        ...loggedInUser,
-        dislikedProfiles: [...loggedInUser.dislikedProfiles, userId],
-      });
-    }
-    removeUsersFromCurrentProfiles(userId);
+  const handleDislike = (userId: string) => {
+    updateProfile(userId, "dislikedProfiles", "likedProfiles");
   };
+
+  const handleRemoveUser = (userId: string) => {
+    const likeUnlikeProperty =
+      currentPage === "/liked" ? "likedProfiles" : "dislikedProfiles";
+    updateProfile(userId, likeUnlikeProperty, "");
+  };
+
+  const handleUserChat = (userId: string) => {
+    console.log("start chatting with userId : ", userId);
+  };
+
   return (
     <Container>
       {!currentUserProfiles ? (
@@ -59,6 +83,8 @@ const UserList = () => {
                 user={user}
                 onLike={() => handleLike(user?.userId)}
                 onDislike={() => handleDislike(user?.userId)}
+                onRemove={() => handleRemoveUser(user?.userId)}
+                onMessage={() => handleUserChat(user?.userId)}
               />
             </Grid>
           ))}
