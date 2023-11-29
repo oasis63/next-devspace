@@ -74,6 +74,7 @@ export const getGeoCoordinates = async (): Promise<GeoCoordinates> => {
     if ("geolocation" in navigator) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
+          console.log('location data : ', position)
           const { latitude, longitude } = position.coords;
           resolve({ latitude, longitude });
         },
@@ -154,15 +155,15 @@ const getCityName = async (
 };
 
 // Example: Get city name for a specific location
-const location: GeoCoordinates = {
-  latitude: 40.748817,
-  longitude: -73.985428,
-};
+// const location: GeoCoordinates = {
+//   latitude: 40.748817,
+//   longitude: -73.985428,
+// };
 
-getCityName(location).then((addressComponents) => {
-  if (addressComponents) {
-    console.log("City Name:", addressComponents.city);
-    console.log("State:", addressComponents.state);
-    console.log("Country:", addressComponents.country);
-  }
-});
+// getCityName(location).then((addressComponents) => {
+//   if (addressComponents) {
+//     console.log("City Name:", addressComponents.city);
+//     console.log("State:", addressComponents.state);
+//     console.log("Country:", addressComponents.country);
+//   }
+// });
