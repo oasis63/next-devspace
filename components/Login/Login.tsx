@@ -9,7 +9,11 @@ interface FormValues extends FieldValues {
 }
 
 const Login = () => {
-  const { handleSubmit, register } = useForm<FormValues>();
+  const {
+    handleSubmit,
+    register,
+    formState: { errors },
+  } = useForm<FormValues>();
   const router = useRouter();
 
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
@@ -33,16 +37,22 @@ const Login = () => {
         <TextField
           label="Email"
           type="email"
-          {...register("email")}
+          {...register("email", { required: "Email is required." })}
           fullWidth
           margin="normal"
+          error={!!errors.email}
+          helperText={errors.email && errors.email.message && "Enter Email"}
         />
         <TextField
           label="Password"
           type="password"
-          {...register("password")}
+          {...register("password", { required: "Password is required" })}
           fullWidth
           margin="normal"
+          error={!!errors.password}
+          helperText={
+            errors.password && errors.password.message && "Password is required"
+          }
         />
         <Button type="submit" variant="contained" color="primary">
           Sign In

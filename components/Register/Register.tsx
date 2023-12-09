@@ -26,10 +26,16 @@ interface FormValues extends FieldValues {
 }
 
 const Register = () => {
-  const { handleSubmit, control, register } = useForm<FormValues>();
+  const {
+    handleSubmit,
+    control,
+    register,
+    formState: { errors },
+  } = useForm<FormValues>();
   const router = useRouter();
 
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
+    console.log(errors);
     try {
       console.log("register form submit data : ", data);
       const newUser: User = {
@@ -79,6 +85,10 @@ const Register = () => {
             {...register("email", { required: "Email is required" })}
             fullWidth
             margin="normal"
+            error={!!errors.email}
+            helperText={
+              errors.email && errors.email.message && "Email is required"
+            }
           />
         </Grid>
         <Grid item xs={12} sm={12} md={12} lg={12}>
@@ -88,6 +98,12 @@ const Register = () => {
             {...register("password", { required: "Password is required" })}
             fullWidth
             margin="normal"
+            error={!!errors.password}
+            helperText={
+              errors.password &&
+              errors.password.message &&
+              "Password is required"
+            }
           />
         </Grid>
 
@@ -98,6 +114,8 @@ const Register = () => {
             {...register("age", { required: "Age is required", min: 18 })}
             fullWidth
             margin="normal"
+            error={!!errors.age}
+            helperText={errors.age && errors.age.message && "Minimum age is 18"}
           />
         </Grid>
         <Grid item xs={6} sm={6} md={6} lg={6}>
@@ -107,6 +125,10 @@ const Register = () => {
             fullWidth
             margin="normal"
             {...register("gender", { required: "Gender is required" })}
+            error={!!errors.gender}
+            helperText={
+              errors.gender && errors.gender.message && "Gender is required"
+            }
           >
             <MenuItem value="Male">Male</MenuItem>
             <MenuItem value="Female">Female</MenuItem>
@@ -121,6 +143,12 @@ const Register = () => {
             fullWidth
             margin="normal"
             {...register("lookingFor", { required: "Looking For is required" })}
+            error={!!errors.lookingFor}
+            helperText={
+              errors.lookingFor &&
+              errors.lookingFor.message &&
+              "What are you looking for"
+            }
           >
             <MenuItem value="Male">Male</MenuItem>
             <MenuItem value="Female">Female</MenuItem>
