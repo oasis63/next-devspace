@@ -4,3 +4,4 @@
 #4. upload atleast one photo on sign up .. --> later strict for photo upload .. 
 #5. on clicking of user profile card .. --> should open the selected profile
 #6. Add error handling form error messages in the register form 
+#7. Do.. LOGIN,SIGN IN, SIGNUP, using Auth.js package
