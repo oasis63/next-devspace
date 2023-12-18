@@ -81,10 +81,10 @@ const UserList = () => {
             <Grid item key={user.userId} xs={12} sm={6} md={4}>
               <UserCard
                 user={user}
-                onLike={() => handleLike(user?.userId)}
-                onDislike={() => handleDislike(user?.userId)}
-                onRemove={() => handleRemoveUser(user?.userId)}
-                onMessage={() => handleUserChat(user?.userId)}
+                onLike={() => user?.userId && handleLike(user?.userId)}
+                onDislike={() => user?.userId && handleDislike(user?.userId)}
+                onRemove={() => user?.userId && handleRemoveUser(user?.userId)}
+                onMessage={() => user?.userId && handleUserChat(user?.userId)}
               />
             </Grid>
           ))}
