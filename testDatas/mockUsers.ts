@@ -2,6 +2,30 @@ import { User } from "@/utils/models";
 
 export const mockUsers: User[] = [
   {
+    userId: "0",
+    username: "admin",
+    name: "Admin",
+    age: 26,
+    email: "admin@gmail.com",
+    phone: "123-456-7890",
+    location: {
+      city: "New York",
+      state: "NY",
+      country: "USA",
+    },
+    interests: ["Reading", "Hiking", "Photography"],
+    matchingPreference: {
+      age: {
+        min: 25,
+        max: 35,
+      },
+      gender: "Female",
+      distance: 50,
+    },
+    photos: ["https://reqres.in/img/faces/1-image.jpg"],
+    password: "admin",
+  },
+  {
     userId: "1",
     username: "john_doe",
     name: "John Doe",
