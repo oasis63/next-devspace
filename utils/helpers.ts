@@ -56,7 +56,9 @@ export const filterProfilesForGivenIds = (
   usersList: User[],
   userIds: string[]
 ) => {
-  return usersList.filter((user) => !userIds?.includes(user.userId));
+  return usersList.filter(
+    (user) => user && user.userId && !userIds?.includes(user.userId)
+  );
 };
 
 // Function to convert degrees to radians

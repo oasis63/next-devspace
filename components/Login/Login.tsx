@@ -24,11 +24,15 @@ const Login = (props?: any) => {
 
   const { isLoggedIn, setIsLoggedIn } = useDatingStore();
 
-  useEffect(() => {
-    if (isLoggedIn) {
-      router.push("/");
-    }
-  }, []);
+  if (isLoggedIn) {
+    router.push("/");
+  }
+
+  // useEffect(() => {
+  //   if (isLoggedIn) {
+  //     router.push("/");
+  //   }
+  // }, []);
 
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
     try {
