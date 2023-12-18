@@ -12,7 +12,7 @@ export interface Location {
 }
 
 export interface User {
-  userId: string;
+  userId?: string;
   username?: string;
   name?: string;
   age?: number;
@@ -25,7 +25,7 @@ export interface User {
       min?: number;
       max?: number;
     };
-    gender?: "Male" | "Female" | "Other";
+    gender?: string;
     distance?: number;
   };
   photos?: string[]; // string arrays of base64 values
