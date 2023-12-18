@@ -8,6 +8,8 @@ import {
   Button,
   IconButton,
   Badge,
+  Menu,
+  MenuItem,
 } from "@mui/material";
 import Link from "next/link";
 import styles from "./Header.module.scss";
@@ -20,7 +22,12 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle"; // Import Acc
 import ProfileAvatar from "../ProfileAvatar/ProfileAvatar";
 import { useRouter } from "next/router";
 import { useDatingStore, useHeaderStore } from "@/store";
-import { filterProfilesForGivenIds, filterUserProfiles } from "@/utils/helpers";
+import {
+  filterProfilesForGivenIds,
+  filterUserProfiles,
+  removeUserLocalStorageData,
+} from "@/utils/helpers";
+import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 
 const Header = () => {
   const router = useRouter();
@@ -31,8 +38,11 @@ const Header = () => {
     totalUserProfiles,
     currentUserProfiles,
     currentPage,
+    isLoggedIn,
     setCurrentPage,
     setCurrentUserProfiles,
+    setLoggedInUser,
+    setIsLoggedIn,
   } = useDatingStore();
 
   const loadHomePage = () => {
@@ -68,6 +78,31 @@ const Header = () => {
     });
   };
 
+  // State for handling dropdown menu
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const handleMenuClick = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleMenuClose = () => {
+    setAnchorEl(null);
+  };
+
+  const handleLogout = async () => {
+    removeUserLocalStorageData();
+    const response = await fetch("/api/logout");
+    if (response?.status == 200) {
+      setLoggedInUser(null);
+      setIsLoggedIn(false);
+      const res = await response.json();
+      window.location.href = "/";
+      // window.location.href = "/login";
+    }
+  };
+
+  const navigateToLogin = () => {
+    router.push("/login");
+  };
+
   return (
     <AppBar position="static" className={styles.header}>
       <Toolbar>
@@ -88,35 +123,59 @@ const Header = () => {
         </Typography>
         <SearchBar />
         <FilterByCity />
-        {/* Liked Profiles Button */}{" "}
-        {/* <IconButton color="inherit" onClick={onDislikedProfilesClick}> */}
-        <IconButton color="inherit" onClick={showLikedProfiles}>
-          <Badge
-            badgeContent={loggedInUser?.likedProfiles?.length || 0}
-            color="error"
-          >
-            <FavoriteIcon />
-          </Badge>
-        </IconButton>
-        {/* Disliked Profiles Button */}
-        <IconButton color="inherit" onClick={showDislikedProfiles}>
-          <Badge
-            badgeContent={loggedInUser?.dislikedProfiles?.length || 0}
-            color="error"
-          >
-            <ThumbDownIcon />
-          </Badge>
-        </IconButton>
-        {/* <Link href="/"> */}
         <IconButton color="inherit" onClick={loadHomePage}>
           <HomeIcon />
         </IconButton>
-        {/* </Link> */}
-        {/* Profile Link with Profile Photo */}
-        <Link href="/profile">
-          <ProfileAvatar profilePhotoUrl={loggedInUser?.profilePhotoUrl} />
-        </Link>
-        {/* Add more navigation links as needed */}
+        {isLoggedIn && loggedInUser && (
+          <>
+            {/* Liked Profiles Button */}{" "}
+            {/* <IconButton color="inherit" onClick={onDislikedProfilesClick}> */}
+            <IconButton color="inherit" onClick={showLikedProfiles}>
+              <Badge
+                badgeContent={loggedInUser?.likedProfiles?.length || 0}
+                color="error"
+              >
+                <FavoriteIcon />
+              </Badge>
+            </IconButton>
+            {/* Disliked Profiles Button */}
+            <IconButton color="inherit" onClick={showDislikedProfiles}>
+              <Badge
+                badgeContent={loggedInUser?.dislikedProfiles?.length || 0}
+                color="error"
+              >
+                <ThumbDownIcon />
+              </Badge>
+            </IconButton>
+            <Link href="/profile">
+              <ProfileAvatar profilePhotoUrl={loggedInUser?.profilePhotoUrl} />
+            </Link>
+            <IconButton
+              color="inherit"
+              onClick={handleMenuClick}
+              aria-controls="profile-menu"
+              aria-haspopup="true"
+            >
+              <ArrowDropDownIcon />
+            </IconButton>
+            <Menu
+              id="profile-menu"
+              anchorEl={anchorEl}
+              keepMounted
+              open={Boolean(anchorEl)}
+              onClose={handleMenuClose}
+            >
+              <MenuItem onClick={handleLogout}>Logout</MenuItem>
+            </Menu>
+          </>
+        )}
+        {(!loggedInUser || !isLoggedIn) && (
+          <>
+            <Button variant="contained" onClick={navigateToLogin}>
+              Log In
+            </Button>
+          </>
+        )}
       </Toolbar>
     </AppBar>
   );

@@ -1,6 +1,20 @@
 import crypto from "crypto";
 import { GeoCoordinates, Location, User } from "./models";
 
+export function isUserLoggedIn() {
+  if (typeof window !== "undefined") {
+    return localStorage.getItem("isLoggedIn") == "true";
+  }
+  return false;
+}
+
+export function removeUserLocalStorageData() {
+  if (typeof window !== "undefined") {
+    localStorage.removeItem("token");
+    localStorage.removeItem("isLoggedIn");
+  }
+}
+
 export function generateSecureUserId() {
   // Generate a random string using Node.js crypto module
   const randomString = crypto.randomBytes(16).toString("hex");
@@ -74,7 +88,7 @@ export const getGeoCoordinates = async (): Promise<GeoCoordinates> => {
     if ("geolocation" in navigator) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
-          console.log('location data : ', position)
+          console.log("location data : ", position);
           const { latitude, longitude } = position.coords;
           resolve({ latitude, longitude });
         },

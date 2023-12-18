@@ -3,6 +3,9 @@ import { useForm, SubmitHandler, FieldValues } from "react-hook-form";
 import { Button, TextField, Typography } from "@mui/material";
 import { useRouter } from "next/router";
 import jwt from "jsonwebtoken";
+import { customFetch } from "@/utils/fetchHelper";
+import { useDatingStore } from "@/store";
+import { removeUserLocalStorageData } from "@/utils/helpers";
 
 interface FormValues extends FieldValues {
   email: string;
@@ -18,6 +21,14 @@ const Login = (props?: any) => {
   const router = useRouter();
   const [message, setMessage] = useState<string>("You are not logged in.");
   const [secret, setSecret] = useState<string>("");
+
+  const { isLoggedIn, setIsLoggedIn } = useDatingStore();
+
+  useEffect(() => {
+    if (isLoggedIn) {
+      router.push("/");
+    }
+  }, []);
 
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
     try {
@@ -46,6 +57,10 @@ const Login = (props?: any) => {
         );
 
         localStorage.setItem("token", token);
+        localStorage.setItem("isLoggedIn", "true");
+
+        setIsLoggedIn(true);
+        router.push("/");
       } else {
         setMessage("Something went wrong.");
       }
@@ -55,27 +70,22 @@ const Login = (props?: any) => {
   };
 
   const fetchData = async () => {
-    const storedToken = localStorage.getItem("token");
-    // const tokenValue: string = Cookies.get("token") || "";
-    // console.log("tokenValue : ", tokenValue);
-    const response = await fetch("api/protected-sample-api", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        authorization: storedToken as string,
-      },
-    });
-    const data = await response.json();
+    const fetchProps = {
+      url: "api/protected-sample-api",
+    };
+    const data = await customFetch(fetchProps);
     console.log("data ", data);
   };
 
   const handleLogout = async () => {
-    localStorage.removeItem("token");
+    removeUserLocalStorageData();
+    setIsLoggedIn(false);
     const response = await fetch("/api/logout");
     if (response?.status == 200) {
       const res = await response.json();
       // Redirect to the login page
-      window.location.href = "/login";
+      // window.location.href = "/login";
+      window.location.href = "/";
     }
   };
 
