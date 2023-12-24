@@ -1,4 +1,5 @@
 // pages/register.tsx
+import { useState } from "react";
 import { useForm, SubmitHandler, FieldValues } from "react-hook-form";
 import {
   Button,
@@ -14,6 +15,12 @@ import {
 } from "@mui/material";
 import { useRouter } from "next/router";
 import { User } from "@/utils/models";
+import { useDatingStore } from "@/store";
+import { removeUserLocalStorageData } from "@/utils/helpers";
+import InputAdornment from "@mui/material/InputAdornment";
+import IconButton from "@mui/material/IconButton";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 // import { User, signUp } from "../types";
 
 interface FormValues extends FieldValues {
@@ -26,20 +33,27 @@ interface FormValues extends FieldValues {
 }
 
 const Register = () => {
+  const { setAlertProps, setLoggedInUser, setIsLoggedIn } = useDatingStore();
   const {
     handleSubmit,
     control,
     register,
     formState: { errors },
-  } = useForm<FormValues>();
+  } = useForm<User>({ mode: "onChange" });
   const router = useRouter();
 
-  const onSubmit: SubmitHandler<FormValues> = async (data) => {
+  const [showPassword, setShowPassword] = useState(false);
+  const handleTogglePasswordVisibility = () => {
+    setShowPassword((prevShowPassword) => !prevShowPassword);
+  };
+
+  const onSubmit: SubmitHandler<User> = async (data) => {
     console.log(errors);
     try {
       console.log("register form submit data : ", data);
       const newUser: User = {
         username: data.username,
+        name: data.name,
         email: data.email,
         password: data.password,
         age: data.age,
@@ -52,7 +66,42 @@ const Register = () => {
       console.log("newUser : ", newUser);
       //   await signUp(user);
       //   router.push("/signin");
+
+      const response = await fetch("/api/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(newUser),
+      });
+
+      console.log("response : ", response);
+      const resData = await response.json();
+
+      console.log("resData : ", resData);
+
+      removeUserLocalStorageData();
+      setLoggedInUser(null);
+      setIsLoggedIn(false);
+
+      if (response?.status === 200) {
+        setAlertProps({
+          message: "Successfully registered!",
+          severity: "success",
+        });
+        // route to login page after few seconds
+        router.push("/login");
+      } else {
+        setAlertProps({
+          message: resData?.error || "Error",
+          severity: "error",
+        });
+      }
     } catch (error) {
+      setAlertProps({
+        message: "Signup failed",
+        severity: "error",
+      });
       console.error("Signup failed:", error);
     }
   };
@@ -66,14 +115,15 @@ const Register = () => {
         md={12}
         lg={12}
         container
+        item
         component={"form"}
         onSubmit={handleSubmit(onSubmit)}
       >
         <Grid item xs={12} sm={12} md={12} lg={12}>
           <TextField
-            label="Username"
+            label="Name"
             type="text"
-            {...register("username", { required: "Username is required" })}
+            {...register("name", { required: "Name is required" })}
             fullWidth
             margin="normal"
           />
@@ -94,10 +144,23 @@ const Register = () => {
         <Grid item xs={12} sm={12} md={12} lg={12}>
           <TextField
             label="Password"
-            type="password"
+            type={showPassword ? "text" : "password"}
             {...register("password", { required: "Password is required" })}
             fullWidth
             margin="normal"
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton
+                    onClick={handleTogglePasswordVisibility}
+                    edge="end"
+                    sx={{ color: showPassword ? "green" : "gray" }}
+                  >
+                    {showPassword ? <VisibilityIcon /> : <VisibilityOffIcon />}
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
             error={!!errors.password}
             helperText={
               errors.password &&

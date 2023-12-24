@@ -1,31 +1,10 @@
 // stores/headerStore.ts
 import { mockUsers } from "@/testDatas/mockUsers";
 import { isUserLoggedIn } from "@/utils/helpers";
-import { User } from "@/utils/models";
 import { create } from "zustand";
+import { DatingStore, IAlertProps } from "./typings";
 
-interface DatingStore {
-  users: User[];
-  totalUserProfiles: User[];
-  currentUserProfiles: User[];
-  cities: string[];
-  currentCity: string;
-  loggedInUser: User | null;
-  isLoading: boolean;
-  isLoggedIn: boolean;
-  error: any;
-  currentPage: string;
-  setCurrentPage: (pageName: string) => void;
-  setCurrentCity: (city: string) => void;
-  setUsers: (users: User[]) => void;
-  getTotalUserProfiles: (users?: User[]) => void;
-  setCurrentUserProfiles: (currentUsers: User[]) => void;
-  setCities: (cities: string[]) => void;
-  setLoggedInUser: (user: User | null) => void;
-  setIsLoggedIn: (isLogin: boolean) => void;
-}
-
-export const useDatingStore = create<DatingStore>((set, get) => ({
+const initialState = {
   users: [],
   totalUserProfiles: [],
   currentUserProfiles: [],
@@ -36,6 +15,22 @@ export const useDatingStore = create<DatingStore>((set, get) => ({
   error: null,
   currentCity: "",
   currentPage: "/",
+  alertProps: null,
+};
+
+export const useDatingStore = create<DatingStore>((set, get) => ({
+  users: initialState.users,
+  totalUserProfiles: initialState.totalUserProfiles,
+  currentUserProfiles: initialState.currentUserProfiles,
+  cities: initialState.cities,
+  loggedInUser: initialState.loggedInUser,
+  isLoggedIn: initialState.isLoggedIn,
+  isLoading: initialState.isLoading,
+  error: initialState.error,
+  currentCity: initialState.currentCity,
+  currentPage: initialState.currentPage,
+  alertProps: initialState.alertProps,
+  setAlertProps: (alertProps: IAlertProps | null) => set({ alertProps }),
   setCurrentPage: (pageName: string) => set({ currentPage: pageName }),
   setCurrentCity: (city) => set({ currentCity: city }),
   setUsers: (users) => set({ users: users }),

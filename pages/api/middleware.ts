@@ -5,7 +5,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 
 const JWT_SECRET_KEY = process.env.JWT_SECRET_KEY || "jwt-secret-key";
 
-export function generateToken(userTokenData: any): string {
+export function generateJWT(userTokenData: any): string {
   return jwt.sign({ ...userTokenData }, JWT_SECRET_KEY, { expiresIn: "1h" });
 }
 
