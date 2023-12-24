@@ -5,12 +5,13 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { IconButton } from "@mui/material";
 import styles from "./ProfileAvatar.module.scss";
 import { ProfileAvatarProps } from "./typings";
+import Image from "next/image";
 
 const ProfileAvatar: React.FC<ProfileAvatarProps> = ({ profilePhotoUrl }) => {
   return (
     <IconButton color="inherit">
       {profilePhotoUrl ? (
-        <img
+        <Image
           src={profilePhotoUrl}
           alt="Profile"
           className={styles.profilePhoto}
