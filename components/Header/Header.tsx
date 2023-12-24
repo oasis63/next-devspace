@@ -10,6 +10,7 @@ import {
   Badge,
   Menu,
   MenuItem,
+  Stack,
 } from "@mui/material";
 import Link from "next/link";
 import styles from "./Header.module.scss";
@@ -28,6 +29,7 @@ import {
   removeUserLocalStorageData,
 } from "@/utils/helpers";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
+import Logout from "../Logout/Logout";
 
 const Header = () => {
   const router = useRouter();
@@ -103,6 +105,10 @@ const Header = () => {
     router.push("/login");
   };
 
+  const navigateToRegister = () => {
+    router.push("/register");
+  };
+
   return (
     <AppBar position="static" className={styles.header}>
       <Toolbar>
@@ -165,16 +171,21 @@ const Header = () => {
               open={Boolean(anchorEl)}
               onClose={handleMenuClose}
             >
-              <MenuItem onClick={handleLogout}>Logout</MenuItem>
+              <MenuItem>
+                <Logout />
+              </MenuItem>
             </Menu>
           </>
         )}
         {(!loggedInUser || !isLoggedIn) && (
-          <>
+          <Stack flexDirection={"row"}>
             <Button variant="contained" onClick={navigateToLogin}>
               Log In
             </Button>
-          </>
+            <Button variant="contained" onClick={navigateToRegister}>
+              Register
+            </Button>
+          </Stack>
         )}
       </Toolbar>
     </AppBar>
