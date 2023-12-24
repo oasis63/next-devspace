@@ -28,6 +28,7 @@ import {
   removeUserLocalStorageData,
 } from "@/utils/helpers";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
+import Logout from "../Logout/Logout";
 
 const Header = () => {
   const router = useRouter();
@@ -165,7 +166,9 @@ const Header = () => {
               open={Boolean(anchorEl)}
               onClose={handleMenuClose}
             >
-              <MenuItem onClick={handleLogout}>Logout</MenuItem>
+              <MenuItem>
+                <Logout />
+              </MenuItem>
             </Menu>
           </>
         )}

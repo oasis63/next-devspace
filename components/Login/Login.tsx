@@ -6,6 +6,7 @@ import jwt from "jsonwebtoken";
 import { customFetch } from "@/utils/fetchHelper";
 import { useDatingStore } from "@/store";
 import { removeUserLocalStorageData } from "@/utils/helpers";
+import Logout from "../Logout/Logout";
 
 interface FormValues extends FieldValues {
   email: string;
@@ -81,18 +82,6 @@ const Login = (props?: any) => {
     console.log("data ", data);
   };
 
-  const handleLogout = async () => {
-    removeUserLocalStorageData();
-    setIsLoggedIn(false);
-    const response = await fetch("/api/logout");
-    if (response?.status == 200) {
-      const res = await response.json();
-      // Redirect to the login page
-      // window.location.href = "/login";
-      window.location.href = "/";
-    }
-  };
-
   return (
     <div>
       <Typography variant="h4">Sign In</Typography>
@@ -131,9 +120,7 @@ const Login = (props?: any) => {
 
       <div>
         <p>Are you sure you want to log out?</p>
-        <Button variant="contained" onClick={handleLogout}>
-          {"Logout"}
-        </Button>
+        <Logout />
       </div>
     </div>
   );

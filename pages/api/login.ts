@@ -1,10 +1,12 @@
 // http://localhost:3000/api/login
 import type { NextApiRequest, NextApiResponse } from "next";
 import logger from "@/lib/logger";
-import jwt from "jsonwebtoken";
-import { generateToken, setTokenCookie } from "./middleware";
+import { generateJWT, setTokenCookie } from "./middleware";
+import { getAllMockUsers, getMockUserByEmail } from "./mock/sharedMockUsers";
+import { verifyPassword } from "./utils/security/bcryptUtils";
 
-const JWT_SECRET_KEY = process.env.JWT_SECRET_KEY || "jwt-secret-key";
+// mock shared data
+const sharedMockUsers = getAllMockUsers();
 
 export default async function handler(
   req: NextApiRequest,
@@ -17,31 +19,54 @@ export default async function handler(
     }
   });
 
-  if (!req.body) {
-    res.statusCode = 404;
-    res.end("Error");
-    return;
+  try {
+    if (req && req.method === "POST") {
+      if (!req.body) {
+        res.statusCode = 404;
+        res.end("Error");
+        return;
+      }
+      const { email, password } = req.body;
+      // check email and password in db .
+      const userData = getMockUserByEmail(email);
+      if (userData) {
+        const savedHashedPassword = userData.password;
+
+        const passwordMatch = await verifyPassword(
+          password,
+          savedHashedPassword
+        );
+
+        if (passwordMatch) {
+          const tokenParamData = {
+            email: email,
+            admin: email.includes("admin") && password == "admin",
+          };
+
+          const token = generateJWT(tokenParamData);
+
+          setTokenCookie(res, token);
+
+          res.status(200);
+          res.json({
+            token: token,
+          });
+        } else {
+          res.status(401).json({ error: "Incorrect password" });
+          return;
+        }
+      } else {
+        res.status(404);
+        res.json({ error: "User not found" });
+        return;
+      }
+    } else {
+      res.status(405).json({ error: "Method Not Allowed" });
+      return;
+    }
+  } catch (error) {
+    res.statusCode = 500;
+    console.error("Error:", error);
+    res.json({ error: "Internal Server Error" });
   }
-
-  const { email, password } = req.body;
-  // check email and password in db .
-
-  const tokenInData = {
-    email: email,
-    admin: email.includes("admin") && password == "admin",
-  };
-  const token = generateToken(tokenInData);
-  setTokenCookie(res, token);
-
-  //   const generatedToken = jwt.sign(
-  //     {
-  //       email: email,
-  //       admin: email.includes("admin") && password == "admin",
-  //     },
-  //     JWT_SECRET_KEY
-  //   );
-
-  res.json({
-    token: token,
-  });
 }

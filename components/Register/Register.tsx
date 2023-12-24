@@ -31,15 +31,16 @@ const Register = () => {
     control,
     register,
     formState: { errors },
-  } = useForm<FormValues>();
+  } = useForm<User>({ mode: "onChange" });
   const router = useRouter();
 
-  const onSubmit: SubmitHandler<FormValues> = async (data) => {
+  const onSubmit: SubmitHandler<User> = async (data) => {
     console.log(errors);
     try {
       console.log("register form submit data : ", data);
       const newUser: User = {
         username: data.username,
+        name: data.name,
         email: data.email,
         password: data.password,
         age: data.age,
@@ -52,6 +53,17 @@ const Register = () => {
       console.log("newUser : ", newUser);
       //   await signUp(user);
       //   router.push("/signin");
+
+      const response = await fetch("/api/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(newUser),
+      });
+      const resData = await response.json();
+
+      console.log("resData : ", resData);
     } catch (error) {
       console.error("Signup failed:", error);
     }
@@ -66,14 +78,15 @@ const Register = () => {
         md={12}
         lg={12}
         container
+        item
         component={"form"}
         onSubmit={handleSubmit(onSubmit)}
       >
         <Grid item xs={12} sm={12} md={12} lg={12}>
           <TextField
-            label="Username"
+            label="Name"
             type="text"
-            {...register("username", { required: "Username is required" })}
+            {...register("name", { required: "Name is required" })}
             fullWidth
             margin="normal"
           />
