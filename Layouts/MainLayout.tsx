@@ -1,5 +1,6 @@
 // components/Layout.tsx
 import FooterMui from "@/components/FooterMui/FooterMui";
+import ToastMessage from "@/components/Global/ToastMessage/ToastMessage";
 import Header from "@/components/Header/Header";
 import { useDatingStore } from "@/store";
 import { filterProfilesForGivenIds, getGeoCoordinates } from "@/utils/helpers";
@@ -25,6 +26,8 @@ const MainLayout: React.FC<LayoutProps> = ({ children }) => {
 
   const {
     totalUserProfiles,
+    alertProps,
+    setAlertProps,
     setCities,
     getTotalUserProfiles,
     setLoggedInUser,
@@ -111,10 +114,24 @@ const MainLayout: React.FC<LayoutProps> = ({ children }) => {
     }
   }, [router]);
 
+  const alertOnClose = () => {
+    setAlertProps(null);
+  };
+
   return (
     <>
       <Header />
       <Container maxWidth="lg">{children}</Container>
+
+      {alertProps && (
+        <ToastMessage
+          alertOnClose={alertOnClose}
+          message={alertProps.message}
+          severity={alertProps.severity || "success"}
+          timeOut={6000}
+        />
+      )}
+
       <FooterMui />
     </>
   );

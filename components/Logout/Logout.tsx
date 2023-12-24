@@ -7,7 +7,7 @@ import React from "react";
 const Logout = () => {
   const router = useRouter();
 
-  const { setLoggedInUser, setIsLoggedIn } = useDatingStore();
+  const { setLoggedInUser, setIsLoggedIn, setAlertProps } = useDatingStore();
 
   const handleLogout = async () => {
     removeUserLocalStorageData();
@@ -16,6 +16,12 @@ const Logout = () => {
       setLoggedInUser(null);
       setIsLoggedIn(false);
       const res = await response.json();
+
+      setAlertProps({
+        message: "Logout Successfully!",
+        severity: "success",
+      });
+
       window.location.href = "/";
       // window.location.href = "/login";
     }

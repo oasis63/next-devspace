@@ -23,7 +23,7 @@ export default async function handler(
     if (req && req.method === "POST") {
       if (!req.body) {
         res.statusCode = 404;
-        res.end("Error");
+        res.json({ error: "Error" });
         return;
       }
       const { email, password } = req.body;

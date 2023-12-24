@@ -25,7 +25,7 @@ export default async function handler(
 
   if (!req.body) {
     res.statusCode = 404;
-    res.end("Error");
+    res.json({ error: "Error. No data in request body" });
     return;
   }
 

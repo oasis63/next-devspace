@@ -7,6 +7,10 @@ import { customFetch } from "@/utils/fetchHelper";
 import { useDatingStore } from "@/store";
 import { removeUserLocalStorageData } from "@/utils/helpers";
 import Logout from "../Logout/Logout";
+import InputAdornment from "@mui/material/InputAdornment";
+import IconButton from "@mui/material/IconButton";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 
 interface FormValues extends FieldValues {
   email: string;
@@ -20,10 +24,13 @@ const Login = (props?: any) => {
     formState: { errors },
   } = useForm<FormValues>();
   const router = useRouter();
-  const [message, setMessage] = useState<string>("You are not logged in.");
-  const [secret, setSecret] = useState<string>("");
 
-  const { isLoggedIn, setIsLoggedIn } = useDatingStore();
+  const { isLoggedIn, setIsLoggedIn, setAlertProps } = useDatingStore();
+
+  const [showPassword, setShowPassword] = useState(false);
+  const handleTogglePasswordVisibility = () => {
+    setShowPassword((prevShowPassword) => !prevShowPassword);
+  };
 
   if (isLoggedIn) {
     router.push("/");
@@ -45,32 +52,33 @@ const Login = (props?: any) => {
         body: JSON.stringify(data),
       });
       const resData = await response.json();
-      //   const user = await signIn(data.email, data.password);
-      //   if (user) {
-      //     router.push("/dashboard");
-      //   } else {
-      //     console.error("Invalid credentials");
-      //   }
-      const token = resData.token;
-      if (token) {
-        const decoded = jwt.decode(token) as { [key: string]: string };
-        console.log("decoded : ", decoded);
-        setMessage(
-          `Welcome ${decoded.email} and you are ${
-            decoded.admin ? " an admin" : " not an admin"
-          }!`
-        );
+
+      if (response?.status === 200 && resData?.token) {
+        const token = resData.token;
+        // const decoded = jwt.decode(token) as { [key: string]: string };
 
         localStorage.setItem("token", token);
         localStorage.setItem("isLoggedIn", "true");
 
         setIsLoggedIn(true);
+
+        setAlertProps({
+          message: "LoggedIn Successfully!",
+          severity: "success",
+        });
+
         router.push("/");
       } else {
-        setMessage("Something went wrong.");
+        setAlertProps({
+          message: resData?.error || "Error",
+          severity: "error",
+        });
       }
     } catch (error) {
-      console.error("Signin failed:", error);
+      setAlertProps({
+        message: "Signin failed",
+        severity: "error",
+      });
     }
   };
 
@@ -85,8 +93,6 @@ const Login = (props?: any) => {
   return (
     <div>
       <Typography variant="h4">Sign In</Typography>
-      <h1>{message} </h1>
-      <h1>Secret : {secret} </h1>
       <form onSubmit={handleSubmit(onSubmit)}>
         message
         <TextField
@@ -100,10 +106,23 @@ const Login = (props?: any) => {
         />
         <TextField
           label="Password"
-          type="password"
+          type={showPassword ? "text" : "password"}
           {...register("password", { required: "Password is required" })}
           fullWidth
           margin="normal"
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position="end">
+                <IconButton
+                  onClick={handleTogglePasswordVisibility}
+                  edge="end"
+                  sx={{ color: showPassword ? "green" : "gray" }}
+                >
+                  {showPassword ? <VisibilityIcon /> : <VisibilityOffIcon />}
+                </IconButton>
+              </InputAdornment>
+            ),
+          }}
           error={!!errors.password}
           helperText={
             errors.password && errors.password.message && "Password is required"
