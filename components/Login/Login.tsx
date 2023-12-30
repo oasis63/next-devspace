@@ -94,7 +94,6 @@ const Login = (props?: any) => {
     <div>
       <Typography variant="h4">Sign In</Typography>
       <form onSubmit={handleSubmit(onSubmit)}>
-        message
         <TextField
           label="Email"
           type="email"

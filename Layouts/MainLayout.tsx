@@ -8,6 +8,7 @@ import { GeoCoordinates, User } from "@/utils/models";
 import { Container } from "@mui/material";
 import { useRouter } from "next/router";
 import { ReactNode, useEffect, useState } from "react";
+import NextTopLoader from "nextjs-toploader";
 
 interface LayoutProps {
   children: ReactNode;
@@ -120,6 +121,8 @@ const MainLayout: React.FC<LayoutProps> = ({ children }) => {
 
   return (
     <>
+      <NextTopLoader color="teal" showSpinner={false} />
+
       <Header />
       <Container maxWidth="lg">{children}</Container>
 
