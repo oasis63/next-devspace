@@ -121,7 +121,7 @@ const MainLayout: React.FC<LayoutProps> = ({ children }) => {
 
   return (
     <>
-      <NextTopLoader color="teal" showSpinner={false} />
+      <NextTopLoader color="red" showSpinner={false} />
 
       <Header />
       <Container maxWidth="lg">{children}</Container>
