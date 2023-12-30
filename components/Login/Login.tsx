@@ -3,7 +3,6 @@ import { useForm, SubmitHandler, FieldValues } from "react-hook-form";
 import { Button, TextField, Typography } from "@mui/material";
 import { useRouter } from "next/router";
 import jwt from "jsonwebtoken";
-import { customFetch } from "@/utils/fetchHelper";
 import { useDatingStore } from "@/store";
 import { removeUserLocalStorageData } from "@/utils/helpers";
 import Logout from "../Logout/Logout";
@@ -11,6 +10,7 @@ import InputAdornment from "@mui/material/InputAdornment";
 import IconButton from "@mui/material/IconButton";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
+import { customFetch } from "@/utils/customFetch";
 
 interface FormValues extends FieldValues {
   email: string;

@@ -26,11 +26,37 @@ export const mockUsers: User[] = [
     password: "admin",
   },
   {
+    userId: "12321",
+    username: "parzival",
+    name: "Parzival",
+    age: 26,
+    email: "parzival@yopmail.com",
+    phone: "9892023489",
+    location: {
+      city: "New York",
+      state: "NY",
+      country: "USA",
+    },
+    interests: ["Reading", "Hiking", "Photography"],
+    matchingPreference: {
+      age: {
+        min: 25,
+        max: 35,
+      },
+      gender: "Female",
+      distance: 50,
+    },
+    photos: [
+      "https://i.pinimg.com/originals/7b/36/b9/7b36b91bb8128d04234d0fb9e36e4747.jpg",
+    ],
+    password: "$2a$10$osBnOLuY4g5TTakvNhx5XO9dC385cQIEM8PshvDuxUPniV8S.d9/6", // Admin#123
+  },
+  {
     userId: "1",
     username: "john_doe",
     name: "John Doe",
     age: 28,
-    email: "john.doe@example.com",
+    email: "john@yopmail.com",
     phone: "123-456-7890",
     location: {
       city: "New York",
@@ -47,14 +73,14 @@ export const mockUsers: User[] = [
       distance: 50,
     },
     photos: ["https://reqres.in/img/faces/1-image.jpg"],
-    password: "securePassword1",
+    password: "$2b$10$qskMtJjMlLJTfInplBk1/OvYLwRZUaoMV3i2AQacKPoNgAuMvvM..", // john
   },
   {
     userId: "2",
     username: "jane_smith",
     name: "Jane Smith",
     age: 32,
-    email: "jane.smith@example.com",
+    email: "jane@yopmail.com",
     phone: "987-654-3210",
     location: {
       city: "Los Angeles",
@@ -71,7 +97,7 @@ export const mockUsers: User[] = [
       distance: 40,
     },
     photos: ["https://reqres.in/img/faces/2-image.jpg"],
-    password: "strongPassword123",
+    password: "$2b$10$xHycVeVWAy8hptjtR6bW5.NMTSWAV3NN48.Sq76XSmS3J3Ft78DEa", // jane
   },
   {
     userId: "3",

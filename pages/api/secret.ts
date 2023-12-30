@@ -1,4 +1,4 @@
-// http://localhost:3000/api/login
+// http://localhost:3000/api/secret
 import type { NextApiRequest, NextApiResponse } from "next";
 import logger from "@/lib/logger";
 import jwt from "jsonwebtoken";

@@ -1,8 +1,9 @@
 // stores/headerStore.ts
-import { mockUsers } from "@/testDatas/mockUsers";
+// import { mockUsers } from "@/pages/api/mock/testDatas/mockUsers";
 import { isUserLoggedIn } from "@/utils/helpers";
 import { create } from "zustand";
 import { DatingStore, IAlertProps } from "./typings";
+import { getAllDBUSers } from "@/api/siteApis";
 
 const initialState = {
   users: [],
@@ -38,22 +39,13 @@ export const useDatingStore = create<DatingStore>((set, get) => ({
   setIsLoggedIn: (isLogin) => set({ isLoggedIn: isLogin }),
   setLoggedInUser: (user) => set({ loggedInUser: user }),
   getTotalUserProfiles: async (users?) => {
-    // async
-    // get all the user profiles for the given city or given area range
     try {
       set({ isLoading: true });
-      // const response = await fetch("/api/users/crudUsers");
-      // console.log("total user profilesisLoggedIn response ", response);
-      // set({ isLoggedIn: true });
+      const resAllUsers = await getAllDBUSers();
       set({
         isLoading: false,
-        totalUserProfiles: mockUsers,
-        // currentUserProfiles: mockUsers,
+        totalUserProfiles: resAllUsers,
       });
-      // console.log(
-      //   "total user profiles totalUserProfiles ",
-      //   get().totalUserProfiles
-      // );
     } catch (err: any) {
       set({ error: err?.message, isLoading: false });
     }
