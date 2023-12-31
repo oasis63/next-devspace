@@ -1,20 +1,6 @@
 import crypto from "crypto";
 import { GeoCoordinates, Location, User } from "./models";
 
-export function isUserLoggedIn() {
-  if (typeof window !== "undefined") {
-    return localStorage.getItem("isLoggedIn") == "true";
-  }
-  return false;
-}
-
-export function removeUserLocalStorageData() {
-  if (typeof window !== "undefined") {
-    localStorage.removeItem("token");
-    localStorage.removeItem("isLoggedIn");
-  }
-}
-
 export function generateSecureUserId() {
   // Generate a random string using Node.js crypto module
   const randomString = crypto.randomBytes(16).toString("hex");
@@ -133,7 +119,20 @@ const getCoordinates = async (city: string) => {
 // Call the function to get coordinates
 // getCoordinates("New York");
 
-const getCityName = async (
+export const getLocationAddressDetails = async (): Promise<Location | null> => {
+  try {
+    const geoCoordinates: GeoCoordinates = await getGeoCoordinates();
+    const getLocationAddress: Location | null = await getAddressComponets(
+      geoCoordinates
+    );
+    return getLocationAddress;
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
+};
+
+const getAddressComponets = async (
   location: GeoCoordinates
 ): Promise<Location | null> => {
   const { latitude, longitude } = location;

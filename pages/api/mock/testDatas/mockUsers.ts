@@ -23,10 +23,13 @@ export const mockUsers: User[] = [
       distance: 50,
     },
     photos: ["https://reqres.in/img/faces/1-image.jpg"],
+    profilePhotoUrl: "https://reqres.in/img/faces/1-image.jpg",
+    likedProfiles: ["2", "4", "1"],
+    dislikedProfiles: ["5"],
     password: "admin",
   },
   {
-    userId: "12321",
+    userId: "1",
     username: "parzival",
     name: "Parzival",
     age: 26,
@@ -49,10 +52,14 @@ export const mockUsers: User[] = [
     photos: [
       "https://i.pinimg.com/originals/7b/36/b9/7b36b91bb8128d04234d0fb9e36e4747.jpg",
     ],
+    profilePhotoUrl:
+      "https://i.pinimg.com/originals/7b/36/b9/7b36b91bb8128d04234d0fb9e36e4747.jpg",
+    likedProfiles: ["2", "4", "0"],
+    dislikedProfiles: ["3"],
     password: "$2a$10$osBnOLuY4g5TTakvNhx5XO9dC385cQIEM8PshvDuxUPniV8S.d9/6", // Admin#123
   },
   {
-    userId: "1",
+    userId: "2",
     username: "john_doe",
     name: "John Doe",
     age: 28,
@@ -76,7 +83,7 @@ export const mockUsers: User[] = [
     password: "$2b$10$qskMtJjMlLJTfInplBk1/OvYLwRZUaoMV3i2AQacKPoNgAuMvvM..", // john
   },
   {
-    userId: "2",
+    userId: "3",
     username: "jane_smith",
     name: "Jane Smith",
     age: 32,
@@ -100,7 +107,7 @@ export const mockUsers: User[] = [
     password: "$2b$10$xHycVeVWAy8hptjtR6bW5.NMTSWAV3NN48.Sq76XSmS3J3Ft78DEa", // jane
   },
   {
-    userId: "3",
+    userId: "4",
     username: "alice_wonder",
     name: "Alice Wonderland",
     age: 22,
@@ -124,7 +131,7 @@ export const mockUsers: User[] = [
     password: "securePass789",
   },
   {
-    userId: "4",
+    userId: "5",
     username: "bob_adventurer",
     name: "Bob Adventurer",
     age: 40,
@@ -149,7 +156,7 @@ export const mockUsers: User[] = [
   },
 
   {
-    userId: "5",
+    userId: "6",
     username: "bob_adventurer",
     name: "rikky Adventurer",
     age: 40,
@@ -173,7 +180,7 @@ export const mockUsers: User[] = [
     password: "pass1234",
   },
   {
-    userId: "6",
+    userId: "7",
     username: "tracey.ramos",
     name: "Tracey Ramos",
     email: "tracey.ramos@reqres.in",
@@ -197,7 +204,7 @@ export const mockUsers: User[] = [
     password: "pass1234",
   },
   {
-    userId: "7",
+    userId: "8",
     username: "bob_adventurer",
     name: "Bob Adventurer",
     age: 40,
@@ -221,7 +228,7 @@ export const mockUsers: User[] = [
     password: "pass1234",
   },
   {
-    userId: "8",
+    userId: "9",
     username: "bob_adventurer",
     name: "Bob Adventurer",
     age: 40,
@@ -245,7 +252,7 @@ export const mockUsers: User[] = [
     password: "pass1234",
   },
   {
-    userId: "9",
+    userId: "10",
     username: "bob_adventurer",
     name: "Bob Adventurer",
     age: 40,

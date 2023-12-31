@@ -5,9 +5,13 @@ import UserCard from "../UserCard/UserCard";
 import { UserListProps } from "./typings";
 import { useDatingStore } from "@/store";
 import { filterProfilesForGivenIds } from "@/utils/helpers";
+import { useRouter } from "next/router";
 
 const UserList = () => {
+  const router = useRouter();
+
   const {
+    isLoggedIn,
     loggedInUser,
     currentUserProfiles,
     totalUserProfiles,
@@ -52,11 +56,14 @@ const UserList = () => {
     removeUsersFromCurrentProfiles(userId);
   };
 
-  const handleLike = (userId: string) => {
-    updateProfile(userId, "likedProfiles", "dislikedProfiles");
-  };
-  const handleDislike = (userId: string) => {
-    updateProfile(userId, "dislikedProfiles", "likedProfiles");
+  const handleLikeDislike = (userId: string, actionType: string) => {
+    if (!isLoggedIn) {
+      router.push("/login");
+      return;
+    }
+    const complementActionType =
+      actionType == "dislikedProfiles" ? "likedProfiles" : "dislikedProfiles";
+    updateProfile(userId, actionType, complementActionType);
   };
 
   const handleRemoveUser = (userId: string) => {
@@ -81,8 +88,14 @@ const UserList = () => {
             <Grid item key={user.userId} xs={12} sm={6} md={4}>
               <UserCard
                 user={user}
-                onLike={() => user?.userId && handleLike(user?.userId)}
-                onDislike={() => user?.userId && handleDislike(user?.userId)}
+                onLike={() =>
+                  user?.userId &&
+                  handleLikeDislike(user?.userId, "likedProfiles")
+                }
+                onDislike={() =>
+                  user?.userId &&
+                  handleLikeDislike(user?.userId, "dislikedProfiles")
+                }
                 onRemove={() => user?.userId && handleRemoveUser(user?.userId)}
                 onMessage={() => user?.userId && handleUserChat(user?.userId)}
               />

@@ -1,4 +1,4 @@
-import { User } from "@/utils/models";
+import { GeoCoordinates, User } from "@/utils/models";
 import { AlertColor } from "@mui/material";
 
 export interface IAlertProps {
@@ -18,6 +18,8 @@ export interface DatingStore {
   error: any;
   currentPage: string;
   alertProps: IAlertProps | null;
+  userGeoCoordinates: GeoCoordinates | null;
+  setUserGeoCoordinates: (userGeoCoordinates: GeoCoordinates) => void;
   setCurrentPage: (pageName: string) => void;
   setCurrentCity: (city: string) => void;
   setUsers: (users: User[]) => void;

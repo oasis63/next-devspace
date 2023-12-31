@@ -1,9 +1,10 @@
 // stores/headerStore.ts
 // import { mockUsers } from "@/pages/api/mock/testDatas/mockUsers";
-import { isUserLoggedIn } from "@/utils/helpers";
 import { create } from "zustand";
 import { DatingStore, IAlertProps } from "./typings";
 import { getAllDBUSers } from "@/api/siteApis";
+import { GeoCoordinates } from "@/utils/models";
+import { isUserLoggedIn } from "@/utils/authUtils";
 
 const initialState = {
   users: [],
@@ -17,6 +18,7 @@ const initialState = {
   currentCity: "",
   currentPage: "/",
   alertProps: null,
+  userGeoCoordinates: null,
 };
 
 export const useDatingStore = create<DatingStore>((set, get) => ({
@@ -31,6 +33,9 @@ export const useDatingStore = create<DatingStore>((set, get) => ({
   currentCity: initialState.currentCity,
   currentPage: initialState.currentPage,
   alertProps: initialState.alertProps,
+  userGeoCoordinates: initialState.userGeoCoordinates,
+  setUserGeoCoordinates: (userGeoCoordinates: GeoCoordinates | null) =>
+    set({ userGeoCoordinates }),
   setAlertProps: (alertProps: IAlertProps | null) => set({ alertProps }),
   setCurrentPage: (pageName: string) => set({ currentPage: pageName }),
   setCurrentCity: (city) => set({ currentCity: city }),
@@ -41,11 +46,14 @@ export const useDatingStore = create<DatingStore>((set, get) => ({
   getTotalUserProfiles: async (users?) => {
     try {
       set({ isLoading: true });
+      // modify this get users for the given city
       const resAllUsers = await getAllDBUSers();
-      set({
-        isLoading: false,
-        totalUserProfiles: resAllUsers,
-      });
+      console.log("resAllUsers : ", resAllUsers);
+      set({ currentUserProfiles: resAllUsers }),
+        set({
+          isLoading: false,
+          totalUserProfiles: resAllUsers,
+        });
     } catch (err: any) {
       set({ error: err?.message, isLoading: false });
     }
