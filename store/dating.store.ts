@@ -48,12 +48,11 @@ export const useDatingStore = create<DatingStore>((set, get) => ({
       set({ isLoading: true });
       // modify this get users for the given city
       const resAllUsers = await getAllDBUSers();
-      console.log("resAllUsers : ", resAllUsers);
-      set({ currentUserProfiles: resAllUsers }),
-        set({
-          isLoading: false,
-          totalUserProfiles: resAllUsers,
-        });
+      // set({ currentUserProfiles: resAllUsers }),
+      set({
+        isLoading: false,
+        totalUserProfiles: resAllUsers,
+      });
     } catch (err: any) {
       set({ error: err?.message, isLoading: false });
     }

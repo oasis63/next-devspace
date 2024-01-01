@@ -154,7 +154,6 @@ export const mockUsers: User[] = [
     photos: ["https://reqres.in/img/faces/4-image.jpg"],
     password: "pass1234",
   },
-
   {
     userId: "6",
     username: "bob_adventurer",

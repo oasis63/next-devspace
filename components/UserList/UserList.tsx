@@ -6,6 +6,8 @@ import { UserListProps } from "./typings";
 import { useDatingStore } from "@/store";
 import { filterProfilesForGivenIds } from "@/utils/helpers";
 import { useRouter } from "next/router";
+import { useEffect } from "react";
+import { isUserLoggedIn } from "@/utils/authUtils";
 
 const UserList = () => {
   const router = useRouter();
@@ -16,9 +18,18 @@ const UserList = () => {
     currentUserProfiles,
     totalUserProfiles,
     currentPage,
+    setAlertProps,
     setLoggedInUser,
     setCurrentUserProfiles,
   } = useDatingStore();
+
+  const notLoggedInUserState = () => {
+    setAlertProps({
+      message: "Login for this action",
+      severity: "warning",
+    });
+    // router.push("/login");
+  };
 
   const removeUsersFromCurrentProfiles = (userId: string) => {
     const fiteredUserProfiles = filterProfilesForGivenIds(currentUserProfiles, [
@@ -58,7 +69,7 @@ const UserList = () => {
 
   const handleLikeDislike = (userId: string, actionType: string) => {
     if (!isLoggedIn) {
-      router.push("/login");
+      notLoggedInUserState();
       return;
     }
     const complementActionType =
@@ -67,14 +78,35 @@ const UserList = () => {
   };
 
   const handleRemoveUser = (userId: string) => {
+    if (!isLoggedIn) {
+      notLoggedInUserState();
+      return;
+    }
     const likeUnlikeProperty =
       currentPage === "/liked" ? "likedProfiles" : "dislikedProfiles";
     updateProfile(userId, likeUnlikeProperty, "");
   };
 
   const handleUserChat = (userId: string) => {
+    if (!isLoggedIn) {
+      notLoggedInUserState();
+      return;
+    }
     console.log("start chatting with userId : ", userId);
   };
+
+  useEffect(() => {
+    if (isUserLoggedIn()) {
+      setCurrentUserProfiles(
+        filterProfilesForGivenIds(totalUserProfiles, [
+          ...((loggedInUser?.dislikedProfiles || []) as string[]),
+          ...((loggedInUser?.likedProfiles || []) as string[]),
+        ])
+      );
+    } else {
+      setCurrentUserProfiles([...totalUserProfiles]);
+    }
+  }, [totalUserProfiles]);
 
   return (
     <Container>
