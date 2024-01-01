@@ -6,7 +6,7 @@ import { IconButton } from "@mui/material";
 import { ProfileAvatarProps } from "./typings";
 import Image from "next/image";
 
-const ProfileAvatar: React.FC<ProfileAvatarProps> = ({ profilePhotoUrl }) => {
+const ProfileAvatar = ({ profilePhotoUrl }: ProfileAvatarProps) => {
   return (
     <IconButton color="inherit">
       {profilePhotoUrl ? (

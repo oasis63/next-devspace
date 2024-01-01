@@ -32,7 +32,7 @@ const citiesData = [
   "Denver",
 ];
 
-const MainLayout: React.FC<LayoutProps> = ({ children }) => {
+const MainLayout = ({ children }: LayoutProps) => {
   const router = useRouter();
   const pathname = router.pathname;
 

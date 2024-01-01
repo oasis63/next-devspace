@@ -5,7 +5,7 @@ import { InputBase, IconButton, Paper } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import styles from "./SearchBar.module.scss";
 
-const SearchBar: React.FC = () => {
+const SearchBar = () => {
   return (
     <Paper className={styles.searchBar}>
       <IconButton className={styles.searchIcon}>
