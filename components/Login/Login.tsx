@@ -71,9 +71,9 @@ const Login = (props?: any) => {
 
         setLoggedInUser(resUserData);
 
-        localStorage.setItem(TOKEN_KEY, token);
-        localStorage.setItem(IS_LOGGEDIN_KEY, "true");
-        localStorage.setItem(USER_DATA_KEY, JSON.stringify(resUserData));
+        setLocalStorageKeyData(TOKEN_KEY, token);
+        setLocalStorageKeyData(IS_LOGGEDIN_KEY, "true");
+        // setLocalStorageKeyData(USER_DATA_KEY, JSON.stringify(resUserData));
 
         const encryptedUserData = encryptData(resUserData);
         // const encryptedUserData = await highEncryptData(resUserData);
