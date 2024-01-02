@@ -47,6 +47,12 @@ export const filterProfilesForGivenIds = (
   );
 };
 
+export const profilesForGivenIds = (usersList: User[], userIds: string[]) => {
+  return usersList.filter(
+    (user) => user && user.userId && userIds?.includes(user.userId)
+  );
+};
+
 // Function to convert degrees to radians
 export const toRadians = (degree: number): number => {
   return (degree * Math.PI) / 180;

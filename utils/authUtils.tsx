@@ -46,6 +46,14 @@ export function decryptData(encryptedData: string) {
   return decryptedData;
 }
 
+export const getUserDataFromLocalStorage = () => {
+  if (isUserLoggedIn()) {
+    const storedEncryptedUserData = getLocalStorageKeyData(ENC_USER_DATA_KEY);
+    if (storedEncryptedUserData) return decryptData(storedEncryptedUserData);
+  }
+  return null;
+};
+
 // higher secure encryption
 export const highEncryptData = async (data: User) => {
   const text = JSON.stringify(data);

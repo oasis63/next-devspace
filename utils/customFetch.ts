@@ -7,8 +7,8 @@ interface IFetchProps {
   body?: any;
 }
 
-export const customFetch = async (props: IFetchProps) => {
-  const storedToken = localStorage.getItem(TOKEN_KEY);
+export const customFetch = async (props: IFetchProps, token?: string) => {
+  const storedToken = token || localStorage.getItem(TOKEN_KEY);
 
   try {
     const response = await fetch(props.url, {
