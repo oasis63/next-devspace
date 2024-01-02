@@ -23,7 +23,11 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle"; // Import Acc
 import ProfileAvatar from "../ProfileAvatar/ProfileAvatar";
 import { useRouter } from "next/router";
 import { useDatingStore } from "@/store";
-import { filterProfilesForGivenIds, filterUserProfiles } from "@/utils/helpers";
+import {
+  filterProfilesForGivenIds,
+  filterUserProfiles,
+  profilesForGivenIds,
+} from "@/utils/helpers";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import Logout from "../Logout/Logout";
 import { isUserLoggedIn } from "@/utils/authUtils";
@@ -58,8 +62,14 @@ const Header = () => {
   };
 
   const showDislikedProfiles = () => {
+    // setCurrentUserProfiles(
+    //   filterUserProfiles(totalUserProfiles, loggedInUser, "disliked")
+    // );
+
     setCurrentUserProfiles(
-      filterUserProfiles(totalUserProfiles, loggedInUser, "disliked")
+      profilesForGivenIds(totalUserProfiles, [
+        ...((loggedInUser?.dislikedProfiles || []) as string[]),
+      ])
     );
     setCurrentPage("/disliked");
     router.push({
@@ -69,9 +79,16 @@ const Header = () => {
   };
 
   const showLikedProfiles = () => {
+    // setCurrentUserProfiles(
+    //   filterUserProfiles(totalUserProfiles, loggedInUser, "liked")
+    // );
+
     setCurrentUserProfiles(
-      filterUserProfiles(totalUserProfiles, loggedInUser, "liked")
+      profilesForGivenIds(totalUserProfiles, [
+        ...((loggedInUser?.likedProfiles || []) as string[]),
+      ])
     );
+
     setCurrentPage("/liked");
     router.push({
       pathname: "/",
