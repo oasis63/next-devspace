@@ -7,6 +7,7 @@ const FooterMui = () => {
     <Container
       component="footer"
       sx={{ mt: 4, py: 2, bgcolor: "background.paper" }}
+      // sx={{ position: "fixed", bottom: 0, left: 0, right: 0 }}
     >
       <Typography variant="body2" color="text.secondary" align="center">
         &copy; 2023 My Dating App. All rights reserved.

@@ -32,7 +32,7 @@ const FeaturedUserInterests = styled(Typography)({
   fontStyle: "italic",
 });
 
-const FeaturedUser: React.FC<FeaturedUserProps> = ({ user }) => {
+const FeaturedUser = ({ user }: FeaturedUserProps) => {
   return (
     <FeaturedUserContainer>
       <FeaturedUserAvatar src={user?.photos?.[0]} alt={user.name} />

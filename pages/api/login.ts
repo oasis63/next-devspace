@@ -4,6 +4,7 @@ import logger from "@/lib/logger";
 import { generateJWT, setTokenCookie } from "./middleware";
 import { getAllMockUsers, getMockUserByEmail } from "./mock/sharedMockUsers";
 import { verifyPassword } from "./utils/security/bcryptUtils";
+import { excludeProperties } from "./utils/helper";
 
 // mock shared data
 const sharedMockUsers = getAllMockUsers();
@@ -47,9 +48,12 @@ export default async function handler(
 
           setTokenCookie(res, token);
 
+          const resUserData = excludeProperties(userData, ["password"]);
+
           res.status(200);
           res.json({
             token: token,
+            user: resUserData,
           });
         } else {
           res.status(401).json({ error: "Incorrect password" });

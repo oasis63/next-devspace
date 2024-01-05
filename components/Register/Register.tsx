@@ -16,11 +16,11 @@ import {
 import { useRouter } from "next/router";
 import { User } from "@/utils/models";
 import { useDatingStore } from "@/store";
-import { removeUserLocalStorageData } from "@/utils/helpers";
 import InputAdornment from "@mui/material/InputAdornment";
 import IconButton from "@mui/material/IconButton";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
+import { removeUserLocalStorageData } from "@/utils/authUtils";
 // import { User, signUp } from "../types";
 
 interface FormValues extends FieldValues {

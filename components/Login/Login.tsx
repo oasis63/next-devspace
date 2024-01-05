@@ -3,14 +3,24 @@ import { useForm, SubmitHandler, FieldValues } from "react-hook-form";
 import { Button, TextField, Typography } from "@mui/material";
 import { useRouter } from "next/router";
 import jwt from "jsonwebtoken";
-import { customFetch } from "@/utils/fetchHelper";
 import { useDatingStore } from "@/store";
-import { removeUserLocalStorageData } from "@/utils/helpers";
 import Logout from "../Logout/Logout";
 import InputAdornment from "@mui/material/InputAdornment";
 import IconButton from "@mui/material/IconButton";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
+import { customFetch } from "@/utils/customFetch";
+import {
+  encryptData,
+  highEncryptData,
+  setLocalStorageKeyData,
+} from "@/utils/authUtils";
+import {
+  ENC_USER_DATA_KEY,
+  IS_LOGGEDIN_KEY,
+  TOKEN_KEY,
+  USER_DATA_KEY,
+} from "@/utils/constants";
 
 interface FormValues extends FieldValues {
   email: string;
@@ -25,7 +35,8 @@ const Login = (props?: any) => {
   } = useForm<FormValues>();
   const router = useRouter();
 
-  const { isLoggedIn, setIsLoggedIn, setAlertProps } = useDatingStore();
+  const { isLoggedIn, setIsLoggedIn, setLoggedInUser, setAlertProps } =
+    useDatingStore();
 
   const [showPassword, setShowPassword] = useState(false);
   const handleTogglePasswordVisibility = () => {
@@ -55,10 +66,18 @@ const Login = (props?: any) => {
 
       if (response?.status === 200 && resData?.token) {
         const token = resData.token;
+        const resUserData = resData.user;
         // const decoded = jwt.decode(token) as { [key: string]: string };
 
-        localStorage.setItem("token", token);
-        localStorage.setItem("isLoggedIn", "true");
+        setLoggedInUser(resUserData);
+
+        setLocalStorageKeyData(TOKEN_KEY, token);
+        setLocalStorageKeyData(IS_LOGGEDIN_KEY, "true");
+        // setLocalStorageKeyData(USER_DATA_KEY, JSON.stringify(resUserData));
+
+        const encryptedUserData = encryptData(resUserData);
+        // const encryptedUserData = await highEncryptData(resUserData);
+        setLocalStorageKeyData(ENC_USER_DATA_KEY, encryptedUserData);
 
         setIsLoggedIn(true);
 
@@ -94,7 +113,6 @@ const Login = (props?: any) => {
     <div>
       <Typography variant="h4">Sign In</Typography>
       <form onSubmit={handleSubmit(onSubmit)}>
-        message
         <TextField
           label="Email"
           type="email"

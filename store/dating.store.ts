@@ -1,8 +1,10 @@
 // stores/headerStore.ts
-import { mockUsers } from "@/testDatas/mockUsers";
-import { isUserLoggedIn } from "@/utils/helpers";
+// import { mockUsers } from "@/pages/api/mock/testDatas/mockUsers";
 import { create } from "zustand";
 import { DatingStore, IAlertProps } from "./typings";
+import { getAllDBUSers } from "@/api/siteApis";
+import { GeoCoordinates } from "@/utils/models";
+import { isUserLoggedIn } from "@/utils/authUtils";
 
 const initialState = {
   users: [],
@@ -16,6 +18,7 @@ const initialState = {
   currentCity: "",
   currentPage: "/",
   alertProps: null,
+  userGeoCoordinates: null,
 };
 
 export const useDatingStore = create<DatingStore>((set, get) => ({
@@ -30,6 +33,9 @@ export const useDatingStore = create<DatingStore>((set, get) => ({
   currentCity: initialState.currentCity,
   currentPage: initialState.currentPage,
   alertProps: initialState.alertProps,
+  userGeoCoordinates: initialState.userGeoCoordinates,
+  setUserGeoCoordinates: (userGeoCoordinates: GeoCoordinates | null) =>
+    set({ userGeoCoordinates }),
   setAlertProps: (alertProps: IAlertProps | null) => set({ alertProps }),
   setCurrentPage: (pageName: string) => set({ currentPage: pageName }),
   setCurrentCity: (city) => set({ currentCity: city }),
@@ -38,22 +44,15 @@ export const useDatingStore = create<DatingStore>((set, get) => ({
   setIsLoggedIn: (isLogin) => set({ isLoggedIn: isLogin }),
   setLoggedInUser: (user) => set({ loggedInUser: user }),
   getTotalUserProfiles: async (users?) => {
-    // async
-    // get all the user profiles for the given city or given area range
     try {
       set({ isLoading: true });
-      // const response = await fetch("/api/users/crudUsers");
-      // console.log("total user profilesisLoggedIn response ", response);
-      // set({ isLoggedIn: true });
+      // modify this get users for the given city
+      const resAllUsers = await getAllDBUSers();
+      // set({ currentUserProfiles: resAllUsers }),
       set({
         isLoading: false,
-        totalUserProfiles: mockUsers,
-        // currentUserProfiles: mockUsers,
+        totalUserProfiles: resAllUsers,
       });
-      // console.log(
-      //   "total user profiles totalUserProfiles ",
-      //   get().totalUserProfiles
-      // );
     } catch (err: any) {
       set({ error: err?.message, isLoading: false });
     }

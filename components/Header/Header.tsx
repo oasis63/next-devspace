@@ -22,45 +22,54 @@ import HomeIcon from "@mui/icons-material/Home";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle"; // Import AccountCircleIcon
 import ProfileAvatar from "../ProfileAvatar/ProfileAvatar";
 import { useRouter } from "next/router";
-import { useDatingStore, useHeaderStore } from "@/store";
+import { useDatingStore } from "@/store";
 import {
   filterProfilesForGivenIds,
   filterUserProfiles,
-  removeUserLocalStorageData,
+  profilesForGivenIds,
 } from "@/utils/helpers";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import Logout from "../Logout/Logout";
+import { isUserLoggedIn } from "@/utils/authUtils";
 
 const Header = () => {
   const router = useRouter();
 
   const {
     loggedInUser,
-    cities,
     totalUserProfiles,
-    currentUserProfiles,
-    currentPage,
     isLoggedIn,
+    userGeoCoordinates,
     setCurrentPage,
     setCurrentUserProfiles,
-    setLoggedInUser,
-    setIsLoggedIn,
   } = useDatingStore();
 
   const loadHomePage = () => {
-    setCurrentUserProfiles(
-      filterProfilesForGivenIds(totalUserProfiles, [
+    let filteredUserIds: string[] = [];
+
+    if (loggedInUser) {
+      filteredUserIds = [
         ...(loggedInUser?.likedProfiles as string[]),
         ...(loggedInUser?.dislikedProfiles as string[]),
-      ])
+      ];
+    }
+
+    setCurrentUserProfiles(
+      filterProfilesForGivenIds(totalUserProfiles, filteredUserIds)
     );
     setCurrentPage("/");
     router.push("/");
   };
 
   const showDislikedProfiles = () => {
+    // setCurrentUserProfiles(
+    //   filterUserProfiles(totalUserProfiles, loggedInUser, "disliked")
+    // );
+
     setCurrentUserProfiles(
-      filterUserProfiles(totalUserProfiles, loggedInUser, "disliked")
+      profilesForGivenIds(totalUserProfiles, [
+        ...((loggedInUser?.dislikedProfiles || []) as string[]),
+      ])
     );
     setCurrentPage("/disliked");
     router.push({
@@ -70,9 +79,16 @@ const Header = () => {
   };
 
   const showLikedProfiles = () => {
+    // setCurrentUserProfiles(
+    //   filterUserProfiles(totalUserProfiles, loggedInUser, "liked")
+    // );
+
     setCurrentUserProfiles(
-      filterUserProfiles(totalUserProfiles, loggedInUser, "liked")
+      profilesForGivenIds(totalUserProfiles, [
+        ...((loggedInUser?.likedProfiles || []) as string[]),
+      ])
     );
+
     setCurrentPage("/liked");
     router.push({
       pathname: "/",
@@ -89,18 +105,6 @@ const Header = () => {
     setAnchorEl(null);
   };
 
-  const handleLogout = async () => {
-    removeUserLocalStorageData();
-    const response = await fetch("/api/logout");
-    if (response?.status == 200) {
-      setLoggedInUser(null);
-      setIsLoggedIn(false);
-      const res = await response.json();
-      window.location.href = "/";
-      // window.location.href = "/login";
-    }
-  };
-
   const navigateToLogin = () => {
     router.push("/login");
   };
@@ -110,7 +114,11 @@ const Header = () => {
   };
 
   return (
-    <AppBar position="static" className={styles.header}>
+    <AppBar
+      position="static"
+      className={styles.header}
+      // sx={{ position: "fixed", bottom: 0, left: 0, right: 0 }}
+    >
       <Toolbar>
         <Typography variant="h6" component="div" className={styles.title}>
           {/* Dating App */}
@@ -118,12 +126,15 @@ const Header = () => {
             Dating App
           </Button>
 
-          {!loggedInUser?.location?.geoCoordinates?.latitude ? (
+          {/* {!loggedInUser?.location?.geoCoordinates?.latitude ? ( */}
+          {!userGeoCoordinates?.latitude ? (
             "Location loading"
           ) : (
             <Typography>
-              Lat : {loggedInUser?.location?.geoCoordinates?.latitude} {"  "}
-              Long : {loggedInUser?.location?.geoCoordinates?.longitude}
+              {/* Lat : {loggedInUser?.location?.geoCoordinates?.latitude} {"  "}
+              Long : {loggedInUser?.location?.geoCoordinates?.longitude} */}
+              Lat : {userGeoCoordinates?.latitude} {"  "}
+              Long : {userGeoCoordinates?.longitude}
             </Typography>
           )}
         </Typography>

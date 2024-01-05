@@ -2,43 +2,30 @@
 
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import Header from "@/components/Header/Header";
 import UserProfile from "@/components/UserProfile/UserProfile";
-// import Header from "../../components/Header";
-// import UserProfile from "../../components/UserProfile";
+import { useDatingStore } from "@/store";
+import { User } from "@/utils/models";
 
-const UserProfilePage: React.FC = () => {
+const UserProfilePage = () => {
   const router = useRouter();
   const { userId } = router.query;
-  const [user, setUser] = useState(null);
-
-  // Fetch user data based on userId from your backend API
-  // For now, let's mock some data
-  const mockUser = {
-    userId: String(userId),
-    name: "John Doe",
-    email: "john.doe@example.com",
-    // Add more user properties as needed
-  };
+  const [user, setUser] = useState<User>();
+  const { isLoggedIn, totalUserProfiles } = useDatingStore();
 
   useEffect(() => {
-    // Simulate fetching user data from an API
-    const fetchUserData = async () => {
-      // Replace with an actual API call
-      const response = await fetch(`/api/users/crudUsers?userId=${userId}`);
-      const data = await response.json();
-      setUser(data);
-    };
+    // const fetchUserData = async () => {
+    //   const response = await fetch(`/api/users/crudUsers?userId=${userId}`);
+    //   console.log("response  : ", response);
+    //   const data = await response.json();
+    //   console.log(data);
+    //   setUser(data);
+    // };
+    // fetchUserData();
 
-    // if (userId) {
-    //   // Simulate delay for API response
-    //   const delay = setTimeout(() => {
-    //     fetchUserData();
-    //   }, 1000);
-
-    //   return () => clearTimeout(delay);
-    // }
-    fetchUserData();
+    if (userId && isLoggedIn) {
+      let userData = totalUserProfiles?.find((user) => user.userId == userId);
+      userData && setUser(userData);
+    }
   }, [userId]);
 
   if (!userId || !user) {
@@ -46,10 +33,9 @@ const UserProfilePage: React.FC = () => {
   }
 
   return (
-    <div>
-      {/* <Header /> */}
-      <UserProfile user={mockUser} />
-    </div>
+    <>
+      <UserProfile user={user} />
+    </>
   );
 };
 
