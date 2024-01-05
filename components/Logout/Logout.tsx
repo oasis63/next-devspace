@@ -1,5 +1,5 @@
 import { useDatingStore } from "@/store";
-import { removeUserLocalStorageData } from "@/utils/helpers";
+import { removeUserLocalStorageData } from "@/utils/authUtils";
 import { Button } from "@mui/material";
 import { useRouter } from "next/router";
 import React from "react";

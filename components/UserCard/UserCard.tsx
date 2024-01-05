@@ -83,13 +83,13 @@ const MessageButton = styled(IconButton)({
   marginRight: "8px",
 });
 
-const UserCard: React.FC<UserCardProps> = ({
+const UserCard = ({
   user,
   onLike,
   onDislike,
   onRemove,
   onMessage,
-}) => {
+}: UserCardProps) => {
   const { currentPage } = useDatingStore();
 
   return (

@@ -3,11 +3,23 @@ import FooterMui from "@/components/FooterMui/FooterMui";
 import ToastMessage from "@/components/Global/ToastMessage/ToastMessage";
 import Header from "@/components/Header/Header";
 import { useDatingStore } from "@/store";
-import { filterProfilesForGivenIds, getGeoCoordinates } from "@/utils/helpers";
-import { GeoCoordinates, User } from "@/utils/models";
+import {
+  filterProfilesForGivenIds,
+  getGeoCoordinates,
+  getLocationAddressDetails,
+} from "@/utils/helpers";
+import { GeoCoordinates, Location, User } from "@/utils/models";
 import { Container } from "@mui/material";
 import { useRouter } from "next/router";
 import { ReactNode, useEffect, useState } from "react";
+import NextTopLoader from "nextjs-toploader";
+import {
+  decryptData,
+  getLocalStorageKeyData,
+  highDecryptData,
+  isUserLoggedIn,
+} from "@/utils/authUtils";
+import { ENC_USER_DATA_KEY, USER_DATA_KEY } from "@/utils/constants";
 
 interface LayoutProps {
   children: ReactNode;
@@ -20,11 +32,13 @@ const citiesData = [
   "Denver",
 ];
 
-const MainLayout: React.FC<LayoutProps> = ({ children }) => {
+const MainLayout = ({ children }: LayoutProps) => {
   const router = useRouter();
   const pathname = router.pathname;
 
   const {
+    isLoggedIn,
+    loggedInUser,
     totalUserProfiles,
     alertProps,
     setAlertProps,
@@ -32,9 +46,10 @@ const MainLayout: React.FC<LayoutProps> = ({ children }) => {
     getTotalUserProfiles,
     setLoggedInUser,
     setCurrentUserProfiles,
+    setUserGeoCoordinates,
   } = useDatingStore();
 
-  const loggedInUser: User = {
+  const loggedInUser1: User = {
     userId: "1",
     username: "john_doe",
     name: "John Doe",
@@ -64,19 +79,36 @@ const MainLayout: React.FC<LayoutProps> = ({ children }) => {
   const getUserGeolocation = async () => {
     try {
       const geoCoordinates: GeoCoordinates = await getGeoCoordinates();
-      setLoggedInUser({
-        ...loggedInUser,
-        location: { ...loggedInUser.location, geoCoordinates },
-      });
+      setUserGeoCoordinates(geoCoordinates);
+      // const geoCoordinates: Location | null = await getLocationAddressDetails();
+      // setLoggedInUser({
+      //   ...loggedInUser,
+      //   location: { ...loggedInUser.location, geoCoordinates },
+      // });
     } catch (error: any) {
       console.error(error.message);
     }
   };
 
   useEffect(() => {
+    // TODO: check it later
+    const getEncryptedData = async (storedEncryptedUserData: string) => {
+      const decryptedUserData = await highDecryptData(storedEncryptedUserData);
+      console.log({ decryptedUserData });
+    };
+    if (isUserLoggedIn()) {
+      const storedEncryptedUserData = getLocalStorageKeyData(ENC_USER_DATA_KEY);
+      if (storedEncryptedUserData) {
+        const decryptedUserData = decryptData(storedEncryptedUserData);
+        setLoggedInUser({ ...decryptedUserData });
+      }
+    }
+  }, []);
+
+  useEffect(() => {
+    // setLoggedInUser(loggedInUser);
     getUserGeolocation();
     setCities(citiesData);
-    setLoggedInUser(loggedInUser);
   }, []);
 
   useEffect(() => {
@@ -84,16 +116,6 @@ const MainLayout: React.FC<LayoutProps> = ({ children }) => {
       await getTotalUserProfiles();
     })();
   }, [getTotalUserProfiles]);
-
-  useEffect(() => {
-    // setCurrentUserProfiles([...totalUserProfiles]);
-    setCurrentUserProfiles(
-      filterProfilesForGivenIds(totalUserProfiles, [
-        ...(loggedInUser.dislikedProfiles as string[]),
-        ...(loggedInUser.likedProfiles as string[]),
-      ])
-    );
-  }, [totalUserProfiles]);
 
   useEffect(() => {
     //console.log("router changed ");
@@ -120,6 +142,8 @@ const MainLayout: React.FC<LayoutProps> = ({ children }) => {
 
   return (
     <>
+      <NextTopLoader color="red" showSpinner={false} />
+
       <Header />
       <Container maxWidth="lg">{children}</Container>
 

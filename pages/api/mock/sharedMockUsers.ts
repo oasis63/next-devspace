@@ -1,32 +1,30 @@
 // faking backend db
 
-interface User {
-  id: number;
-  name: string;
-  email: string;
-}
+import { User } from "@/utils/models";
+import { mockUsers } from "./testDatas/mockUsers";
 
-let users: any[] = [
-  {
-    id: 1,
-    name: "John Doe",
-    email: "john@mail.com",
-    password: "$2b$10$qskMtJjMlLJTfInplBk1/OvYLwRZUaoMV3i2AQacKPoNgAuMvvM..",
-  },
-  {
-    id: 2,
-    name: "Jane Smith",
-    email: "jane@mail.com",
-    password: "$2b$10$xHycVeVWAy8hptjtR6bW5.NMTSWAV3NN48.Sq76XSmS3J3Ft78DEa", // jane
-  },
+let users: User[] = [
+  ...mockUsers,
+  // {
+  //   userId: "1",
+  //   name: "John Doe",
+  //   email: "john@mail.com",
+  //   password: "$2b$10$qskMtJjMlLJTfInplBk1/OvYLwRZUaoMV3i2AQacKPoNgAuMvvM..",
+  // },
+  // {
+  //   userId: "2",
+  //   name: "Jane Smith",
+  //   email: "jane@mail.com",
+  //   password: "$2b$10$xHycVeVWAy8hptjtR6bW5.NMTSWAV3NN48.Sq76XSmS3J3Ft78DEa", // jane
+  // },
 ];
 
-async function addMockUser(newUser: any) {
+async function addMockUser(newUser: User) {
   users.push(newUser);
 }
 
-function getMockUserById(id: number): any {
-  return users.find((user) => user.id === id);
+function getMockUserById(userId: string): User | undefined {
+  return users.find((user) => user.userId === userId);
 }
 
 function getMockUserByEmail(email: string): any {
@@ -64,7 +62,7 @@ function updateUser(id: number, updatedUserData: Partial<User>): void {
   );
 }
 
-function getAllMockUsers(): any[] {
+function getAllMockUsers(): User[] {
   return users;
 }
 

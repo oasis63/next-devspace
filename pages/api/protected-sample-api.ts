@@ -1,14 +1,22 @@
 // pages/api/protected-sample-api.ts
 import { NextApiRequest, NextApiResponse } from "next";
 import { withAuth } from "./middleware";
+import { getMockUserByEmail } from "./mock/sharedMockUsers";
 
-const fetchDataForUser = (email: any) => {
+const fetchDataForUser = (email: string | string[]) => {
   const userData = {
     email,
     username: "exampleUser",
   };
 
-  return userData;
+  let finalEmail = "";
+  if (typeof email !== "string") {
+    finalEmail = email[0];
+  } else {
+    finalEmail = email;
+  }
+
+  return getMockUserByEmail(finalEmail);
 };
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {

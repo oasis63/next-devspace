@@ -1,3 +1,5 @@
+import { TOKEN_KEY } from "./constants";
+
 interface IFetchProps {
   url: string;
   methodType?: string;
@@ -5,8 +7,8 @@ interface IFetchProps {
   body?: any;
 }
 
-export const customFetch = async (props: IFetchProps) => {
-  const storedToken = localStorage.getItem("token");
+export const customFetch = async (props: IFetchProps, token?: string) => {
+  const storedToken = token || localStorage.getItem(TOKEN_KEY);
 
   try {
     const response = await fetch(props.url, {

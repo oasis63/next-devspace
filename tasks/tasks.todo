@@ -5,3 +5,5 @@
 #5. on clicking of user profile card .. --> should open the selected profile
 #6. Add error handling form error messages in the register form 
 #7. Do.. LOGIN,SIGN IN, SIGNUP, using Auth.js package
+#8. state management for loggedin and guest user is not complete
+#9. on back button , current page not loading current page data  
