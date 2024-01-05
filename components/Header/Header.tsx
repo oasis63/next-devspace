@@ -114,7 +114,11 @@ const Header = () => {
   };
 
   return (
-    <AppBar position="static" className={styles.header}>
+    <AppBar
+      position="static"
+      className={styles.header}
+      // sx={{ position: "fixed", bottom: 0, left: 0, right: 0 }}
+    >
       <Toolbar>
         <Typography variant="h6" component="div" className={styles.title}>
           {/* Dating App */}
